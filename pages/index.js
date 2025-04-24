@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { useState } from "react";
-import { ethers } from "ethers";
 
 export default function Home() {
   const [contractAddress, setContractAddress] = useState("");
@@ -9,8 +8,6 @@ export default function Home() {
   const [error, setError] = useState("");
   const [debug, setDebug] = useState("");
 
-  const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
-
   const calculateMarketCap = async () => {
     setLoading(true);
     setError("");
@@ -18,37 +15,26 @@ export default function Home() {
     setMarketCap(null);
 
     try {
-      const provider = new ethers.providers.JsonRpcProvider(BASE_RPC);
+      const response = await fetch("/api/marketcap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contractAddress })
+      });
 
-      // Test RPC connection
-      const blockNumber = await provider.getBlockNumber();
-      setDebug(`RPC connected. Latest block: ${blockNumber}`);
+      const data = await response.json();
 
-      const abi = [
-        "function totalSupply() view returns (uint256)",
-        "function decimals() view returns (uint8)"
-      ];
-      const token = new ethers.Contract(contractAddress, abi, provider);
-
-      const [rawSupply, decimals] = await Promise.all([
-        token.totalSupply(),
-        token.decimals()
-      ]);
-
-      const circulatingSupply = Number(ethers.utils.formatUnits(rawSupply, decimals));
-      const requiredMarketCap = circulatingSupply * 1;
-
-      setMarketCap(requiredMarketCap.toLocaleString());
-    } catch (err) {
-      console.error("Error details:", err);
-      setDebug(JSON.stringify(err, null, 2));
-      if (err.code === "NETWORK_ERROR") {
-        setError("Network error: Check your Alchemy RPC key or connection.");
-      } else if (err.code === "CALL_EXCEPTION") {
-        setError("The contract may not support totalSupply() or decimals(). Try another address.");
-      } else {
-        setError("Something went wrong. Make sure the contract is valid on Base and try again.");
+      if (!response.ok) {
+        setError(data.error || "Unknown error");
+        setDebug(JSON.stringify(data.details || data, null, 2));
+        return;
       }
+
+      setMarketCap(data.requiredMarketCap.toLocaleString());
+      setDebug(JSON.stringify(data, null, 2));
+    } catch (err) {
+      console.error("Frontend error:", err);
+      setError("Something went wrong. Please try again.");
+      setDebug(err.message || JSON.stringify(err, null, 2));
     } finally {
       setLoading(false);
     }
