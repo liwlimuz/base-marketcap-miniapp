@@ -6,6 +6,8 @@ export default function Home() {
   const [marketCap, setMarketCap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [priceInfo, setPriceInfo] = useState("");
+  const [targetsData, setTargetsData] = useState([]);
   const [debug, setDebug] = useState("");
 
   const calculateMarketCap = async () => {
@@ -29,7 +31,19 @@ export default function Home() {
         return;
       }
 
-      setMarketCap(data.requiredMarketCap.toLocaleString());
+      se
+      if (data.usdPrice && data.timesAway) {
+        setPriceInfo(`Current price $${Number(data.usdPrice)
+      if (data.targets) {
+        setTargetsData(data.targets);
+      } else {
+        setTargetsData([]);
+      }
+.toFixed(6)} → ${data.timesAway}× away from $1`);
+      } else {
+        setPriceInfo("");
+      }
+tMarketCap(data.requiredMarketCap.toLocaleString());
       setDebug(JSON.stringify(data, null, 2));
     } catch (err) {
       console.error("Frontend error:", err);
@@ -66,7 +80,21 @@ export default function Home() {
             {loading ? "Calculating..." : "Calculate Market Cap"}
           </button>
 
-          {marketCap && (
+          
+          
+          {targetsData.length > 0 && (
+            <div className="space-y-1 text-sm text-purple-700">
+              {targetsData.map(t => (
+                <div key={t.price}>
+                  Target ${t.price}: need ${Number(t.requiredMarketCap).toLocaleString()} market‑cap → {t.timesAway > 1 ? `${t.timesAway}× away` : `${(1/t.timesAway).toFixed(2)}× above target`}
+                </div>
+              ))}
+            </div>
+          )}
+{priceInfo && (
+            <div className="text-blue-600 text-center text-sm">{priceInfo}</div>
+          )}
+{marketCap && (
             <div className="text-green-600 font-semibold text-center">
               Required Market Cap for $1/token: ${marketCap} USD
             </div>
