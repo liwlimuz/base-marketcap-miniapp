@@ -3,6 +3,10 @@ import { ethers } from "ethers";
 const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 
 export default async function handler(req, res) {
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+
   console.log("🟡 /api/marketcap called");
 
   if (req.method !== "POST") {
