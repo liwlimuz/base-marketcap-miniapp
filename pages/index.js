@@ -7,19 +7,22 @@ export default function Home() {
   const [marketCap, setMarketCap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [debug, setDebug] = useState("");
 
   const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 
   const calculateMarketCap = async () => {
     setLoading(true);
     setError("");
+    setDebug("");
     setMarketCap(null);
 
     try {
       const provider = new ethers.providers.JsonRpcProvider(BASE_RPC);
 
-      // Test connection
-      await provider.getBlockNumber();
+      // Test RPC connection
+      const blockNumber = await provider.getBlockNumber();
+      setDebug(`RPC connected. Latest block: ${blockNumber}`);
 
       const abi = [
         "function totalSupply() view returns (uint256)",
@@ -27,7 +30,6 @@ export default function Home() {
       ];
       const token = new ethers.Contract(contractAddress, abi, provider);
 
-      // Try reading totalSupply and decimals
       const [rawSupply, decimals] = await Promise.all([
         token.totalSupply(),
         token.decimals()
@@ -39,6 +41,7 @@ export default function Home() {
       setMarketCap(requiredMarketCap.toLocaleString());
     } catch (err) {
       console.error("Error details:", err);
+      setDebug(JSON.stringify(err, null, 2));
       if (err.code === "NETWORK_ERROR") {
         setError("Network error: Check your Alchemy RPC key or connection.");
       } else if (err.code === "CALL_EXCEPTION") {
@@ -85,6 +88,12 @@ export default function Home() {
 
           {error && (
             <div className="text-red-600 text-center">{error}</div>
+          )}
+
+          {debug && (
+            <pre className="text-xs text-gray-500 bg-gray-100 p-2 overflow-auto max-h-40 border border-gray-300 rounded-lg">
+              {debug}
+            </pre>
           )}
         </div>
       </main>
