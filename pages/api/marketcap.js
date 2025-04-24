@@ -41,15 +41,15 @@ export default async function handler(req, res) {
 
     console.log("🧮 totalSupply and decimals fetched");
 
-    const circulatingSupply = Number(ethers.formatUnits(rawSupply, decimals));
-    const requiredMarketCap = circulatingSupply * 1;
+    const circulatingSupply = ethers.formatUnits(rawSupply, decimals);
+    const requiredMarketCap = parseFloat(circulatingSupply) * 1;
 
     console.log("✅ Calculation complete");
 
     return res.status(200).json({
       success: true,
-      requiredMarketCap,
-      circulatingSupply,
+      requiredMarketCap: requiredMarketCap.toString(),
+      circulatingSupply: circulatingSupply.toString(),
       decimals,
       blockNumber: blockNumber.toString()
     });
