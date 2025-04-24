@@ -8,7 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const BASE_RPC = "https://mainnet.base.org";
+  const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 
   const calculateMarketCap = async () => {
     setLoading(true);
@@ -17,15 +17,20 @@ export default function Home() {
 
     try {
       const provider = new ethers.providers.JsonRpcProvider(BASE_RPC);
+
+      // Test connection
+      await provider.getBlockNumber();
+
       const abi = [
         "function totalSupply() view returns (uint256)",
         "function decimals() view returns (uint8)"
       ];
       const token = new ethers.Contract(contractAddress, abi, provider);
 
+      // Try reading totalSupply and decimals
       const [rawSupply, decimals] = await Promise.all([
         token.totalSupply(),
-        token.decimals(),
+        token.decimals()
       ]);
 
       const circulatingSupply = Number(ethers.utils.formatUnits(rawSupply, decimals));
@@ -33,8 +38,14 @@ export default function Home() {
 
       setMarketCap(requiredMarketCap.toLocaleString());
     } catch (err) {
-      console.error(err);
-      setError("Failed to fetch token data. Make sure the contract is valid on Base.");
+      console.error("Error details:", err);
+      if (err.code === "NETWORK_ERROR") {
+        setError("Network error: Check your Alchemy RPC key or connection.");
+      } else if (err.code === "CALL_EXCEPTION") {
+        setError("The contract may not support totalSupply() or decimals(). Try another address.");
+      } else {
+        setError("Something went wrong. Make sure the contract is valid on Base and try again.");
+      }
     } finally {
       setLoading(false);
     }
