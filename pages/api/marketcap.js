@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
+import { isAddress } from "ethers/lib/utils";
 
 const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 
 export default async function handler(req, res) {
-  // Add CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
 
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     const { contractAddress } = req.body;
     console.log("📬 Received contract:", contractAddress);
 
-    if (!contractAddress || !ethers.utils.isAddress(contractAddress)) {
+    if (!contractAddress || !isAddress(contractAddress)) {
       console.log("❌ Invalid address");
       return res.status(400).json({ error: "Invalid or missing contract address" });
     }
