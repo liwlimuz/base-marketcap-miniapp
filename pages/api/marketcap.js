@@ -1,5 +1,4 @@
-import { ethers } from "ethers";
-import { isAddress } from "ethers/lib/utils";
+import { ethers, isAddress } from "ethers";
 
 const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 
@@ -23,7 +22,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid or missing contract address" });
     }
 
-    const provider = new ethers.providers.JsonRpcProvider(BASE_RPC);
+    const provider = new ethers.JsonRpcProvider(BASE_RPC);
     console.log("✅ Connected to Base via Alchemy");
 
     const blockNumber = await provider.getBlockNumber();
@@ -42,7 +41,7 @@ export default async function handler(req, res) {
 
     console.log("🧮 totalSupply and decimals fetched");
 
-    const circulatingSupply = Number(ethers.utils.formatUnits(rawSupply, decimals));
+    const circulatingSupply = Number(ethers.formatUnits(rawSupply, decimals));
     const requiredMarketCap = circulatingSupply * 1;
 
     console.log("✅ Calculation complete");
