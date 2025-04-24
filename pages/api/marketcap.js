@@ -47,12 +47,12 @@ export default async function handler(req, res) {
     console.log("✅ Calculation complete");
 
     return res.status(200).json({
-      success: true,
-      requiredMarketCap: requiredMarketCap.toString(),
-      circulatingSupply: circulatingSupply.toString(),
-      decimals,
-      blockNumber: blockNumber.toString()
-    });
+  success: true,
+  requiredMarketCap: requiredMarketCap.toString(),
+  circulatingSupply: circulatingSupply.toString(),
+  decimals: decimals.toString(),
+  blockNumber: blockNumber.toString()
+});
 
   } catch (err) {
     console.error("🔥 Error in backend:", err);
