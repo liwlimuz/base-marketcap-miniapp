@@ -51,7 +51,7 @@ export default async function handler(req, res) {
       requiredMarketCap,
       circulatingSupply,
       decimals,
-      blockNumber
+      blockNumber: blockNumber.toString()
     });
 
   } catch (err) {
