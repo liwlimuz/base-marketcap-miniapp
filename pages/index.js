@@ -89,8 +89,8 @@ export default function Home() {
                   {Number(t.requiredMarketCap).toLocaleString()} market‑cap →
                   {t.timesAway
                     ? t.timesAway > 1
-                      ? ` ${t.timesAway}× away`
-                      : ` ${(1 / t.timesAway).toFixed(2)}× above target`
+                      ? ` ×${t.timesAway} away`
+                      : ` ×${(1 / t.timesAway).toFixed(2)} above target`
                     : " price unavailable"}
                 </div>
               ))}
