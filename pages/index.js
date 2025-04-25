@@ -1,78 +1,36 @@
 import Head from "next/head";
 import { useState } from "react";
 
-const COINGECKO_IDS = [
-  "bitcoin",
-  "ethereum",
-  "dogecoin",
-  "cardano",
-  "shiba-inu",
-  "avalanche-2",
-  "polkadot",
-  "solana",
-  "bonk"
-];
-
 export default function Home() {
-  const [contractAddress, setContractAddress] = useState("");
+  const [addr, setAddr] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [priceInfo, setPriceInfo] = useState("");
-  const [targetsData, setTargetsData] = useState([]);
-  const [athMcData, setAthMcData] = useState([]);
-  const [marketCap1, setMarketCap1] = useState("");
-
-  const fetchAthMcClient = async () => {
-    const results = [];
-    for (const id of COINGECKO_IDS) {
-      try {
-        const url = "https://api.coingecko.com/api/v3/coins/" + id +
-          "?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
-        console.log("Fetching ATH for", id, "from", url);
-        const res = await fetch(url);
-        console.log("Response for", id, res.status);
-        if (!res.ok) continue;
-        const json = await res.json();
-        if (json && json.market_data && json.market_data.ath_market_cap && json.market_data.ath_market_cap.usd) {
-          results.push({ coin: id.toUpperCase(), athMc: json.market_data.ath_market_cap.usd });
-        }
-      } catch (e) {
-        console.error("Error fetching ATH MC for", id, e);
-      }
-    }
-    console.log("ATH results:", results);
-    return results;
-  };
+  const [targets, setTargets] = useState([]);
+  const [ath, setAth] = useState([]);
+  const [cap1, setCap1] = useState("");
 
   const calculate = async () => {
+    if (!addr) return;
     setLoading(true);
     setError("");
     setPriceInfo("");
-    setTargetsData([]);
-    setAthMcData([]);
-    setMarketCap1("");
-
+    setTargets([]);
+    setAth([]);
+    setCap1("");
     try {
       const res = await fetch("/api/marketcap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractAddress: contractAddress.trim() })
+        body: JSON.stringify({ contractAddress: addr.trim() })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Unknown error");
-
+      if (!res.ok) throw new Error(data.error);
       const one = data.targets.find(t => t.price === "1");
-      if (one) setMarketCap1(one.requiredMarketCap);
-
-      if (data.usdPrice && one && one.timesAway) {
-        setPriceInfo(
-          "Current price $" + Number(data.usdPrice).toFixed(6) + " -> x" + one.timesAway + " away from $1"
-        );
-      }
-
-      setTargetsData(data.targets || []);
-      const athResults = await fetchAthMcClient();
-      setAthMcData(athResults);
+      if (one) setCap1(one.requiredMarketCap);
+      setPriceInfo(\`Current price $${Number(data.usdPrice).toFixed(6)} -> x${one.timesAway} away from $1\`);
+      setTargets(data.targets);
+      setAth(data.athMcData);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -80,68 +38,39 @@ export default function Home() {
     }
   };
 
-  const formatFactor = factorStr => {
-    const f = parseFloat(factorStr);
-    if (isNaN(f)) return factorStr;
-    return f >= 10 ? Math.round(f) : f.toFixed(1);
+  const fmt = s => {
+    const f = parseFloat(s);
+    return isNaN(f) ? s : f >= 10 ? Math.round(f) : f.toFixed(1);
   };
 
   return (
     <>
-      <Head>
-        <title>Base Price Targets</title>
-        <meta property="og:image" content="/og.png" />
-      </Head>
+      <Head><title>Base Price Targets</title></Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+        <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
           <h1 className="text-center text-3xl font-black text-purple-700 mb-6">$ Price Targets</h1>
           <input
-            type="text"
-            value={contractAddress}
-            onChange={e => setContractAddress(e.target.value)}
-            placeholder="0x… token address"
-            className="w-full px-4 py-3 mb-4 border rounded-lg text-base bg-white/70"
+            value={addr} onChange={e=>setAddr(e.target.value)}
+            placeholder="0x... token address"
+            className="w-full px-4 py-2 mb-4 border rounded"
           />
-          <button
-            onClick={calculate}
-            disabled={loading}
-            className="w-full mb-6 bg-[#0052FF] text-white py-3 rounded-full text-lg font-semibold hover:scale-[1.03] transition disabled:opacity-60"
-          >
-            {loading ? "Calculating..." : "Calculate"}
-          </button>
-          <div className="text-center mb-4">
-            {marketCap1 && (
-              <div className="text-emerald-600 font-mono text-xl">
-                Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
-              </div>
-            )}
-            {priceInfo && <div className="text-purple-700 text-sm font-mono">{priceInfo}</div>}
-            {error && <div className="text-red-600 text-sm">{error}</div>}
-          </div>
-          {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              {targetsData.map(t => (
-                <div key={t.price} className="bg-purple-100 rounded-2xl p-4 text-center">
-                  <div className="font-semibold text-lg">$ {t.price}</div>
-                  <div className="text-[0.75rem] font-mono mt-1">x{formatFactor(t.timesAway)}</div>
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="bg-white/90 rounded-xl p-4">
-            <h2 className="text-center text-xl font-bold mb-2">Coin ATH Market Caps</h2>
-            {athMcData.length > 0 ? (
-              <ul className="list-disc list-inside text-sm">
-                {athMcData.map(a => (
-                  <li key={a.coin}>
-                    {a.coin} ATH Market Cap: ${Number(a.athMc).toLocaleString()}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="text-center text-sm text-gray-500">No ATH data returned</div>
-            )}
-          </div>
+          <button onClick={calculate} disabled={loading}
+            className="w-full py-2 mb-6 bg-[#0052FF] text-white rounded-full"
+          >{loading?"...":"Calculate"}</button>
+          {cap1 && <div className="text-center mb-4 text-green-600">Necessary MC for $1: ${Number(cap1).toLocaleString()}</div>}
+          {priceInfo && <div className="text-center mb-4 text-purple-700">{priceInfo}</div>}
+          {error && <div className="text-center mb-4 text-red-600">{error}</div>}
+          {targets.length>0 && <div className="grid grid-cols-2 gap-2 mb-6">
+            {targets.map(t=><div key={t.price} className="bg-purple-100 p-2 text-center">
+              ${t.price}<br/>x{fmt(t.timesAway)}
+            </div>)}
+          </div>}
+          {ath.length>0 && <div className="bg-white/90 p-4 rounded">
+            <h2 className="font-bold mb-2">Coin ATH MC</h2>
+            <ul className="list-disc list-inside text-sm">
+              {ath.map(c=><li key={c.coin}>{c.coin}: ${Number(c.athMc).toLocaleString()}</li>)}
+            </ul>
+          </div>}
         </div>
       </main>
     </>
