@@ -16,10 +16,11 @@ const COINGECKO_IDS = [
 
 async function fetchUsdPrice(address) {
   try {
-    const res = await fetch(\`https://api.dexscreener.com/latest/dex/tokens/\${address}\`);
+    const url = "https://api.dexscreener.com/latest/dex/tokens/" + address;
+    const res = await fetch(url);
     if (!res.ok) return 0;
     const json = await res.json();
-    return parseFloat(json?.pairs?.[0]?.priceUsd || "0") || 0;
+    return parseFloat(json && json.pairs && json.pairs[0] && json.pairs[0].priceUsd ? json.pairs[0].priceUsd : "0") || 0;
   } catch {
     return 0;
   }
@@ -27,11 +28,12 @@ async function fetchUsdPrice(address) {
 
 async function fetchAthMarketCaps() {
   const results = [];
-  for (const id of COINGECKO_IDS) {
+  for (let i = 0; i < COINGECKO_IDS.length; i++) {
+    const id = COINGECKO_IDS[i];
     try {
-      const response = await fetch(
-        \`https://api.coingecko.com/api/v3/coins/\${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false\`
-      );
+      const url = "https://api.coingecko.com/api/v3/coins/" + id +
+        "?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+      const response = await fetch(url);
       if (!response.ok) continue;
       const data = await response.json();
       const athMc = data.market_data.ath_market_cap.usd;
