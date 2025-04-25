@@ -56,10 +56,9 @@ export default function Home() {
         <meta property="fc:frame:button:1" content="Open Miniapp" />
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        {/* Responsive card: mobile max 340px, desktop (md+) max 450px (~33% larger) */}
         <div className="w-full max-w-[340px] md:max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
           <h1 className="text-center text-2xl font-black text-purple-700 mb-4">
-            Price Targets
+            $ Price Targets
           </h1>
           <input
             type="text"
