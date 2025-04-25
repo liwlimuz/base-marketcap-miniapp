@@ -10,10 +10,7 @@ export default async function handler(req, res) {
     ]);
     console.log('Fetched usdPrice:', usdPrice, 'athData:', athData);
 
-    // Placeholder targets
-    const targets = [
-      { price: '1', timesAway: (usdPrice ? (1 / usdPrice).toFixed(2) : 0), requiredMarketCap: 0 },
-    ];
+    const targets = [{ price: '1', timesAway: usdPrice ? (1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 }];
 
     res.status(200).json({ usdPrice, targets, athMcData: athData });
   } catch (error) {
