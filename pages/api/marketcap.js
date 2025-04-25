@@ -16,20 +16,22 @@ async function fetchUsdPrice(address) {
 }
 
 async function fetchAthData() {
-  const data = [];
+  const results = [];
   for (const id of COINGECKO_IDS) {
     try {
-      const res = await fetch(
+      const response = await fetch(
         `https://api.coingecko.com/api/v3/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
       );
-      if (!res.ok) continue;
-      const json = await res.json();
-      const ath = json.market_data.ath.usd;
-      const athMc = json.market_data.ath_market_cap.usd;
-      data.push({ coin: id, ath, athMc });
-    } catch {}
+      if (!response.ok) continue;
+      const data = await response.json();
+      const ath = data.market_data.ath.usd;
+      const athMc = data.market_data.ath_market_cap.usd;
+      results.push({ coin: id.toUpperCase(), ath, athMc });
+    } catch {
+      // skip errors
+    }
   }
-  return data;
+  return results;
 }
 
 export default async function handler(req, res) {
@@ -41,37 +43,24 @@ export default async function handler(req, res) {
   if (!contractAddress || !isAddress(contractAddress)) {
     return res.status(400).json({ error: "Invalid contract address" });
   }
-
   try {
     const provider = new ethers.JsonRpcProvider(RPC_URL);
-    const abi = [
-      "function totalSupply() view returns (uint256)",
-      "function decimals() view returns (uint8)"
-    ];
-    const token = new ethers.Contract(contractAddress, abi, provider);
-
-    const [rawSupply, decimals] = await Promise.all([
-      token.totalSupply(),
-      token.decimals()
-    ]);
+    const token = new ethers.Contract(
+      contractAddress,
+      ["function totalSupply() view returns (uint256)", "function decimals() view returns (uint8)"],
+      provider
+    );
+    const [rawSupply, decimals] = await Promise.all([token.totalSupply(), token.decimals()]);
     const supply = parseFloat(ethers.formatUnits(rawSupply, decimals));
     const usdPrice = await fetchUsdPrice(contractAddress);
-
     const targets = TARGETS.map((p) => {
       const requiredMarketCap = (supply * p).toString();
       const timesAway = usdPrice ? (p / usdPrice).toFixed(2) : null;
       return { price: p.toString(), requiredMarketCap, timesAway };
     });
-
     const athData = await fetchAthData();
-
-    return res.status(200).json({
-      success: true,
-      usdPrice: usdPrice.toString(),
-      targets,
-      athData
-    });
-  } catch (err) {
-    return res.status(500).json({ error: "Contract call failed" });
+    return res.status(200).json({ success: true, usdPrice: usdPrice.toString(), targets, athData });
+  } catch (error) {
+    return res.status(500).json({ error: "Contract call failed. Ensure it’s an ERC-20." });
   }
 }

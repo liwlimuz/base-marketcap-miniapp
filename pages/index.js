@@ -22,7 +22,7 @@ export default function Home() {
       const res = await fetch("/api/marketcap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractAddress: contractAddress.trim() })
+        body: JSON.stringify({ contractAddress: contractAddress.trim() }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unknown error");
@@ -45,7 +45,6 @@ export default function Home() {
     }
   };
 
-  // Format factor: no decimals if >=10, one decimal if <10
   const formatFactor = (factorStr) => {
     const f = parseFloat(factorStr);
     if (isNaN(f)) return factorStr;
@@ -62,14 +61,12 @@ export default function Home() {
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
-          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">
-            $ Price Targets
-          </h1>
+          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">$ Price Targets</h1>
           <input
             type="text"
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
-            placeholder="0x... token address"
+            placeholder="0x… token address"
             className="w-full px-4 py-3 mb-4 border rounded-lg text-base bg-white/70"
           />
           <button
@@ -106,8 +103,7 @@ export default function Home() {
               <ul className="list-disc list-inside text-sm">
                 {athData.map((a) => (
                   <li key={a.coin}>
-                    {a.coin.toUpperCase()} ATH: ${Number(a.ath).toLocaleString()} (MC: $
-                    {Number(a.athMc).toLocaleString()})
+                    {a.coin} ATH: ${Number(a.ath).toLocaleString()} (MC: ${Number(a.athMc).toLocaleString()})
                   </li>
                 ))}
               </ul>
