@@ -17,23 +17,32 @@ export default function Home() {
     setMarketCap1("");
 
     try {
-      const res = await fetch("/api/marketcap", {
+      const response = await fetch("/api/marketcap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractAddress: contractAddress.trim() })
+        body: JSON.stringify({ contractAddress: contractAddress.trim() }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Unknown error");
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unknown error");
 
-      const one = data.targets && data.targets.find(t => t.price === "1");
-      if (one) setMarketCap1(one.requiredMarketCap);
-      if (data.usdPrice && data.timesAway) {
+      const oneTarget = data.targets.find((t) => t.price === "1");
+      if (oneTarget) {
+        setMarketCap1(oneTarget.requiredMarketCap);
+      }
+
+      if (data.usdPrice && oneTarget.timesAway) {
         setPriceInfo(
-          "Current price $" + Number(data.usdPrice).toFixed(6) +
-          " -> x" + data.timesAway + " away from $1"
+          "Current price $" +
+            Number(data.usdPrice).toFixed(6) +
+            " -> x" +
+            oneTarget.timesAway +
+            " away from $1"
         );
       }
-      if (data.targets) setTargetsData(data.targets);
+
+      if (data.targets) {
+        setTargetsData(data.targets);
+      }
     } catch (e) {
       setError(e.message);
     } finally {
@@ -54,6 +63,7 @@ export default function Home() {
           </h1>
 
           <input
+            type="text"
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="0x... token address"
@@ -81,9 +91,12 @@ export default function Home() {
           )}
 
           {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 gap-2 mt-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">
               {targetsData.map((t) => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
+                <div
+                  key={t.price}
+                  className="bg-purple-100 rounded-xl p-2 text-center"
+                >
                   <div className="font-semibold">$ {t.price}</div>
                   <div className="text-xs font-mono">x{t.timesAway}</div>
                 </div>
