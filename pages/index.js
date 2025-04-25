@@ -20,23 +20,19 @@ export default function Home() {
       const res = await fetch("/api/marketcap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractAddress: contractAddress.trim() })
+        body: JSON.stringify({ contractAddress: contractAddress.trim() }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unknown error");
+      
+      const oneTarget = data.targets.find((t) => t.price === "1");
+      setMarketCap1(oneTarget?.requiredMarketCap || "");
 
-      // $1 market cap
-      const one = data.targets.find(t => t.price === "1");
-      setMarketCap1(one?.requiredMarketCap || "");
-
-      // Price info based on $1 target
-      if (data.usdPrice && one?.timesAway) {
+      if (data.usdPrice && oneTarget?.timesAway) {
         setPriceInfo(
-          `Current price $${Number(data.usdPrice).toFixed(6)} -> x${one.timesAway} away from $1`
+          `Current price $${Number(data.usdPrice).toFixed(6)} -> x${oneTarget.timesAway} away from $1`
         );
       }
-
-      // All targets
       setTargetsData(data.targets);
     } catch (e) {
       setError(e.message);
@@ -60,7 +56,7 @@ export default function Home() {
           <input
             type="text"
             value={contractAddress}
-            onChange={e => setContractAddress(e.target.value)}
+            onChange={(e) => setContractAddress(e.target.value)}
             placeholder="0x… token address"
             className="w-full px-3 py-2 border rounded-lg text-sm bg-white/70"
           />
@@ -87,10 +83,13 @@ export default function Home() {
 
           {targetsData.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">
-              {targetsData.map(t => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
-                  <div className="font-semibold">$ {t.price}</div>
-                  <div className="text-xs font-mono">x{t.timesAway}</div>
+              {targetsData.map((t) => (
+                <div
+                  key={t.price}
+                  className="bg-purple-100 rounded-xl p-1.5 text-center"
+                >
+                  <div className="font-semibold text-sm">$ {t.price}</div>
+                  <div className="text-[0.55rem] font-mono">x{t.timesAway}</div>
                 </div>
               ))}
             </div>
