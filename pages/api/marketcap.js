@@ -1,21 +1,18 @@
 export default async function handler(req, res) {
-  const { address = '' } = req.query;
-  if (!address.startsWith('0x')) {
+  const { address } = req.query;
+  if (!address || !address.startsWith('0x')) {
     return res.status(400).json({ error: 'Invalid address' });
   }
-
   try {
     const [usdPrice, athData] = await Promise.all([
       fetchUsdPrice(address),
       fetchAthData(address)
     ]);
-
     const targets = [
       { price: '0.1', timesAway: usdPrice ? (0.1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
-      { price: '1',   timesAway: usdPrice ? (1   / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
-      { price: '10',  timesAway: usdPrice ? (10  / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 }
+      { price: '1',   timesAway: usdPrice ? (1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
+      { price: '10',  timesAway: usdPrice ? (10 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 }
     ];
-
     res.status(200).json({ usdPrice, targets, athMcData: athData });
   } catch (error) {
     res.status(500).json({ error: error.message });
