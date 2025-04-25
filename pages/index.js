@@ -58,7 +58,7 @@ export default function Home() {
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full max-w-[340px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
           <h1 className="text-center text-2xl font-black text-purple-700 mb-4">
-            Price Targets
+            Dollar Price Targets
           </h1>
           <input
             type="text"
