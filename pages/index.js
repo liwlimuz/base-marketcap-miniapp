@@ -24,19 +24,23 @@ export default function Home() {
 
   const fetchAthMcClient = async () => {
     const results = [];
-    for (let i = 0; i < COINGECKO_IDS.length; i++) {
-      const id = COINGECKO_IDS[i];
+    for (const id of COINGECKO_IDS) {
       try {
         const url = "https://api.coingecko.com/api/v3/coins/" + id +
           "?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+        console.log("Fetching ATH for", id, "from", url);
         const res = await fetch(url);
+        console.log("Response for", id, res.status);
         if (!res.ok) continue;
         const json = await res.json();
         if (json && json.market_data && json.market_data.ath_market_cap && json.market_data.ath_market_cap.usd) {
           results.push({ coin: id.toUpperCase(), athMc: json.market_data.ath_market_cap.usd });
         }
-      } catch {}
+      } catch (e) {
+        console.error("Error fetching ATH MC for", id, e);
+      }
     }
+    console.log("ATH results:", results);
     return results;
   };
 
@@ -105,17 +109,15 @@ export default function Home() {
           >
             {loading ? "Calculating..." : "Calculate"}
           </button>
-          {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-xl text-center mb-4">
-              Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
-            </div>
-          )}
-          {priceInfo && (
-            <div className="text-purple-700 text-center text-base mb-4 font-mono">{priceInfo}</div>
-          )}
-          {error && (
-            <div className="text-red-600 text-center text-base mb-4">{error}</div>
-          )}
+          <div className="text-center mb-4">
+            {marketCap1 && (
+              <div className="text-emerald-600 font-mono text-xl">
+                Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
+              </div>
+            )}
+            {priceInfo && <div className="text-purple-700 text-sm font-mono">{priceInfo}</div>}
+            {error && <div className="text-red-600 text-sm">{error}</div>}
+          </div>
           {targetsData.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               {targetsData.map(t => (
@@ -126,9 +128,9 @@ export default function Home() {
               ))}
             </div>
           )}
-          {athMcData.length > 0 && (
-            <div className="bg-white/90 rounded-xl p-4">
-              <h2 className="text-center text-xl font-bold mb-2">Coin ATH Market Caps</h2>
+          <div className="bg-white/90 rounded-xl p-4">
+            <h2 className="text-center text-xl font-bold mb-2">Coin ATH Market Caps</h2>
+            {athMcData.length > 0 ? (
               <ul className="list-disc list-inside text-sm">
                 {athMcData.map(a => (
                   <li key={a.coin}>
@@ -136,8 +138,10 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            ) : (
+              <div className="text-center text-sm text-gray-500">No ATH data returned</div>
+            )}
+          </div>
         </div>
       </main>
     </>
