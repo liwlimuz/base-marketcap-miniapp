@@ -56,8 +56,9 @@ export default function Home() {
         <meta property="fc:frame:button:1" content="Open Miniapp" />
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full max-w-[340px] md:max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h1 className="text-center text-2xl font-black text-purple-700 mb-4">
+        {/* Responsive card: mobile max 340px, tablet md+ max 600px, larger screens lg+ max 700px */}
+        <div className="w-full max-w-[340px] md:max-w-[600px] lg:max-w-[700px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">
             $ Price Targets
           </h1>
           <input
@@ -65,41 +66,41 @@ export default function Home() {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="0x... token address"
-            className="w-full px-3 py-2 mb-3 border rounded-lg text-sm bg-white/70"
+            className="w-full px-4 py-3 mb-4 border rounded-lg text-base bg-white/70"
           />
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mb-4 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
+            className="w-full mb-6 bg-[#0052FF] text-white py-3 rounded-full text-lg font-semibold hover:scale-[1.03] transition disabled:opacity-60"
           >
             {loading ? "Calculating..." : "Calculate"}
           </button>
           {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-lg text-center mb-2">
+            <div className="text-emerald-600 font-mono text-xl text-center mb-4">
               Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
             </div>
           )}
           {priceInfo && (
-            <div className="text-purple-700 text-center text-sm mb-2 font-mono">
+            <div className="text-purple-700 text-center text-base mb-4 font-mono">
               {priceInfo}
             </div>
           )}
           {priceError && (
-            <div className="text-yellow-600 text-center text-sm mb-2">
+            <div className="text-yellow-600 text-center text-base mb-4">
               {priceError}
             </div>
           )}
           {error && (
-            <div className="text-red-600 text-center text-sm mb-2">
+            <div className="text-red-600 text-center text-base mb-4">
               {error}
             </div>
           )}
           {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {targetsData.map((t) => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
-                  <div className="font-semibold text-sm">$ {t.price}</div>
-                  <div className="text-[0.65rem] font-mono">x{t.timesAway}</div>
+                <div key={t.price} className="bg-purple-100 rounded-2xl p-4 text-center">
+                  <div className="font-semibold text-lg">$ {t.price}</div>
+                  <div className="text-[0.75rem] font-mono mt-1">x{t.timesAway}</div>
                 </div>
               ))}
             </div>
