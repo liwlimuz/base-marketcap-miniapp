@@ -1,0 +1,98 @@
+import Head from "next/head";
+import { useState } from "react";
+
+export default function Home() {
+  const [contractAddress, setContractAddress] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [priceInfo, setPriceInfo] = useState("");
+  const [targetsData, setTargetsData] = useState([]);
+  const [marketCap1, setMarketCap1] = useState("");
+
+  const calculate = async () => {
+    setLoading(true);
+    setError("");
+    setPriceInfo("");
+    setTargetsData([]);
+    setMarketCap1("");
+
+    try {
+      const res = await fetch("/api/marketcap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contractAddress: contractAddress.trim() })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Unknown error");
+
+      const one = data.targets?.find(t => t.price === "1");
+      if (one) setMarketCap1(one.requiredMarketCap);
+      if (data.usdPrice && data.timesAway) {
+        setPriceInfo(
+          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${data.timesAway} away from $1`
+        );
+      }
+      if (data.targets) setTargetsData(data.targets);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Base Price Targets</title>
+        <meta property="og:image" content="/og.png" />
+      </Head>
+      <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
+        <div className="w-full max-w-[340px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
+          <h1 className="text-center text-2xl font-black tracking-wide text-white mb-4">
+            Price Targets
+          </h1>
+
+          <input
+            value={contractAddress}
+            onChange={(e) => setContractAddress(e.target.value)}
+            placeholder="0x… token address"
+            className="w-full px-3 py-2 border rounded-lg text-sm bg-white/70"
+          />
+
+          <button
+            onClick={calculate}
+            disabled={loading}
+            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
+          >
+            {loading ? "Calculating…" : "Calculate"}
+          </button>
+
+          {marketCap1 && (
+            <div className="text-emerald-600 font-mono text-lg text-center mt-4">
+              $1 Cap: ${Number(marketCap1).toLocaleString()}
+            </div>
+          )}
+
+          {priceInfo && (
+            <div className="text-white text-center text-sm mt-2 font-mono">
+              {priceInfo}
+            </div>
+          )}
+
+          {targetsData.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              {targetsData.map((t) => (
+                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
+                  <div className="font-semibold">$ {t.price}</div>
+                  <div className="text-xs font-mono">×{t.timesAway}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
+        </div>
+      </main>
+    </>
+  );
+}
