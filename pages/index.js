@@ -36,13 +36,20 @@ export default function Home() {
         );
       }
 
-      setTargetsData(data.targets);
-      setAthData(data.athData);
+      setTargetsData(data.targets || []);
+      setAthData(data.athData || []);
     } catch (e) {
       setError(e.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Format factor: no decimals if >=10, one decimal if <10
+  const formatFactor = (factorStr) => {
+    const f = parseFloat(factorStr);
+    if (isNaN(f)) return factorStr;
+    return f >= 10 ? Math.round(f) : f.toFixed(1);
   };
 
   return (
@@ -54,8 +61,10 @@ export default function Home() {
         <meta property="fc:frame:button:1" content="Open Miniapp" />
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full max-w-[340px] md:max-w-[600px] lg:max-w-[700px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
-          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">$ Price Targets</h1>
+        <div className="w-full max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">
+            $ Price Targets
+          </h1>
           <input
             type="text"
             value={contractAddress}
@@ -86,7 +95,7 @@ export default function Home() {
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-purple-100 rounded-2xl p-4 text-center">
                   <div className="font-semibold text-lg">$ {t.price}</div>
-                  <div className="text-[0.75rem] font-mono mt-1">x{t.timesAway}</div>
+                  <div className="text-[0.75rem] font-mono mt-1">x{formatFactor(t.timesAway)}</div>
                 </div>
               ))}
             </div>
