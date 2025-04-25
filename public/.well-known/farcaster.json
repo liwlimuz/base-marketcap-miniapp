@@ -1,8 +1,0 @@
-{
-  "name": "Base Price Targets",
-  "description": "Check how far any Base token is from $0.10, $1, $10, or $100.",
-  "icon": "https://base-marketcap-miniapp.vercel.app/og.png",
-  "website": "https://base-marketcap-miniapp.vercel.app",
-  "appFid": 0,
-  "accountProof": ""
-}
