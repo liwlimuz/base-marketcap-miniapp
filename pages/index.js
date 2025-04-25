@@ -47,6 +47,13 @@ export default function Home() {
     }
   };
 
+  // Helper to format timesAway
+  const formatFactor = (factorStr) => {
+    const factor = parseFloat(factorStr);
+    if (isNaN(factor)) return factorStr;
+    return factor >= 10 ? Math.round(factor) : factor.toFixed(1);
+  };
+
   return (
     <>
       <Head>
@@ -99,7 +106,9 @@ export default function Home() {
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-purple-100 rounded-2xl p-4 text-center">
                   <div className="font-semibold text-lg">$ {t.price}</div>
-                  <div className="text-[0.75rem] font-mono mt-1">x{t.timesAway}</div>
+                  <div className="text-[0.75rem] font-mono mt-1">
+                    x{formatFactor(t.timesAway)}
+                  </div>
                 </div>
               ))}
             </div>
