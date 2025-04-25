@@ -56,7 +56,7 @@ export default function Home() {
         <meta property="fc:frame:button:1" content="Open Miniapp" />
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full max-w-[340px] md:max-w-[600px] lg:max-w-[700px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-10 lg:p-12 md:min-h-[600px]">
+        <div className="w-full max-w-[340px] md:max-w-[600px] lg:max-w-[700px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
           <h1 className="text-center text-3xl font-black text-purple-700 mb-6">
             $ Price Targets
           </h1>
