@@ -29,7 +29,7 @@ export default function Home() {
       if (one) setMarketCap1(one.requiredMarketCap);
       if (data.usdPrice && data.timesAway) {
         setPriceInfo(
-          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${data.timesAway} away from $1`
+          \`Current price $\${Number(data.usdPrice).toFixed(6)} -> x\${data.timesAway} away from $1\`
         );
       }
       if (data.targets) setTargetsData(data.targets);
@@ -69,7 +69,7 @@ export default function Home() {
 
           {marketCap1 && (
             <div className="text-emerald-600 font-mono text-lg text-center mt-4">
-              $1 Cap: ${Number(marketCap1).toLocaleString()}
+              Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
             </div>
           )}
 
@@ -84,7 +84,7 @@ export default function Home() {
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
                   <div className="font-semibold">$ {t.price}</div>
-                  <div className="text-xs font-mono">×{t.timesAway}</div>
+                  <div className="text-xs font-mono">x{t.timesAway}</div>
                 </div>
               ))}
             </div>
