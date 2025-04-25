@@ -48,7 +48,7 @@ export default function Home() {
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full max-w-[340px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h1 className="text-center text-2xl font-black tracking-wide text-white mb-4">
+          <h1 className="text-center text-2xl font-black tracking-wide text-purple-700 mb-4">
             Price Targets
           </h1>
 
@@ -74,7 +74,7 @@ export default function Home() {
           )}
 
           {priceInfo && (
-            <div className="text-white text-center text-sm mt-2 font-mono">
+            <div className="text-purple-700 text-center text-sm mt-2 font-mono">
               {priceInfo}
             </div>
           )}
