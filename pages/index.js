@@ -27,6 +27,8 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unknown error");
 
+      console.log("API response ATH:", data.athMcData);
+
       const one = data.targets.find((t) => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
 
@@ -56,8 +58,6 @@ export default function Home() {
       <Head>
         <title>Base Price Targets</title>
         <meta property="og:image" content="/og.png" />
-        <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:button:1" content="Open Miniapp" />
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
@@ -76,17 +76,15 @@ export default function Home() {
           >
             {loading ? "Calculating..." : "Calculate"}
           </button>
-          {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-xl text-center mb-4">
-              Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
-            </div>
-          )}
-          {priceInfo && (
-            <div className="text-purple-700 text-center text-base mb-4 font-mono">{priceInfo}</div>
-          )}
-          {error && (
-            <div className="text-red-600 text-center text-base mb-4">{error}</div>
-          )}
+          <div className="text-center mb-4">
+            {marketCap1 && (
+              <div className="text-emerald-600 font-mono text-xl">
+                Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
+              </div>
+            )}
+            {priceInfo && <div className="text-purple-700 text-sm font-mono">{priceInfo}</div>}
+            {error && <div className="text-red-600 text-sm">{error}</div>}
+          </div>
           {targetsData.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               {targetsData.map((t) => (
@@ -97,9 +95,10 @@ export default function Home() {
               ))}
             </div>
           )}
-          {athMcData.length > 0 && (
-            <div className="bg-white/90 rounded-xl p-4">
-              <h2 className="text-center text-xl font-bold mb-2">Coin ATH Market Caps</h2>
+          {/* Always render ATH section for debugging */}
+          <div className="bg-white/90 rounded-xl p-4">
+            <h2 className="text-center text-xl font-bold mb-2">Coin ATH Market Caps</h2>
+            {athMcData.length > 0 ? (
               <ul className="list-disc list-inside text-sm">
                 {athMcData.map((a) => (
                   <li key={a.coin}>
@@ -107,8 +106,10 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            ) : (
+              <div className="text-center text-sm text-gray-500">No ATH data returned</div>
+            )}
+          </div>
         </div>
       </main>
     </>

@@ -38,8 +38,8 @@ async function fetchAthMarketCaps() {
       const data = await response.json();
       const athMc = data.market_data.ath_market_cap.usd;
       results.push({ coin: id.toUpperCase(), athMc });
-    } catch {
-      // skip errors
+    } catch (e) {
+      console.error("Error fetching ATH MC for", id, e);
     }
   }
   return results;
