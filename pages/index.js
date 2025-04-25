@@ -25,11 +25,12 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unknown error");
 
-      const one = data.targets?.find(t => t.price === "1");
+      const one = data.targets && data.targets.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
       if (data.usdPrice && data.timesAway) {
         setPriceInfo(
-          \`Current price $\${Number(data.usdPrice).toFixed(6)} -> x\${data.timesAway} away from $1\`
+          "Current price $" + Number(data.usdPrice).toFixed(6) +
+          " -> x" + data.timesAway + " away from $1"
         );
       }
       if (data.targets) setTargetsData(data.targets);
@@ -55,7 +56,7 @@ export default function Home() {
           <input
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
-            placeholder="0x… token address"
+            placeholder="0x... token address"
             className="w-full px-3 py-2 border rounded-lg text-sm bg-white/70"
           />
 
@@ -64,7 +65,7 @@ export default function Home() {
             disabled={loading}
             className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
           >
-            {loading ? "Calculating…" : "Calculate"}
+            {loading ? "Calculating..." : "Calculate"}
           </button>
 
           {marketCap1 && (
