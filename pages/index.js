@@ -7,7 +7,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [priceInfo, setPriceInfo] = useState("");
   const [targetsData, setTargetsData] = useState([]);
-  const [athData, setAthData] = useState([]);
+  const [athMcData, setAthMcData] = useState([]);
   const [marketCap1, setMarketCap1] = useState("");
 
   const calculate = async () => {
@@ -15,7 +15,7 @@ export default function Home() {
     setError("");
     setPriceInfo("");
     setTargetsData([]);
-    setAthData([]);
+    setAthMcData([]);
     setMarketCap1("");
 
     try {
@@ -37,7 +37,7 @@ export default function Home() {
       }
 
       setTargetsData(data.targets || []);
-      setAthData(data.athData || []);
+      setAthMcData(data.athMcData || []);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -97,13 +97,13 @@ export default function Home() {
               ))}
             </div>
           )}
-          {athData.length > 0 && (
+          {athMcData.length > 0 && (
             <div className="bg-white/90 rounded-xl p-4">
-              <h2 className="text-center text-xl font-bold mb-2">Coin ATHs</h2>
+              <h2 className="text-center text-xl font-bold mb-2">Coin ATH Market Caps</h2>
               <ul className="list-disc list-inside text-sm">
-                {athData.map((a) => (
+                {athMcData.map((a) => (
                   <li key={a.coin}>
-                    {a.coin} ATH: ${Number(a.ath).toLocaleString()} (MC: ${Number(a.athMc).toLocaleString()})
+                    {a.coin} ATH Market Cap: ${Number(a.athMc).toLocaleString()}
                   </li>
                 ))}
               </ul>

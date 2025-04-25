@@ -2,11 +2,21 @@ import { ethers, isAddress } from "ethers";
 
 const RPC_URL = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 const TARGETS = [0.1, 1, 10, 100];
-const COINGECKO_IDS = ["bitcoin", "ethereum", "dogecoin"];
+const COINGECKO_IDS = [
+  "bitcoin",
+  "ethereum",
+  "dogecoin",
+  "cardano",
+  "shiba-inu",
+  "avalanche-2",
+  "polkadot",
+  "solana",
+  "bonk"
+];
 
 async function fetchUsdPrice(address) {
   try {
-    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${address}`);
+    const res = await fetch(\`https://api.dexscreener.com/latest/dex/tokens/\${address}\`);
     if (!res.ok) return 0;
     const json = await res.json();
     return parseFloat(json?.pairs?.[0]?.priceUsd || "0") || 0;
@@ -15,18 +25,17 @@ async function fetchUsdPrice(address) {
   }
 }
 
-async function fetchAthData() {
+async function fetchAthMarketCaps() {
   const results = [];
   for (const id of COINGECKO_IDS) {
     try {
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
+        \`https://api.coingecko.com/api/v3/coins/\${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false\`
       );
       if (!response.ok) continue;
       const data = await response.json();
-      const ath = data.market_data.ath.usd;
       const athMc = data.market_data.ath_market_cap.usd;
-      results.push({ coin: id.toUpperCase(), ath, athMc });
+      results.push({ coin: id.toUpperCase(), athMc });
     } catch {
       // skip errors
     }
@@ -58,8 +67,8 @@ export default async function handler(req, res) {
       const timesAway = usdPrice ? (p / usdPrice).toFixed(2) : null;
       return { price: p.toString(), requiredMarketCap, timesAway };
     });
-    const athData = await fetchAthData();
-    return res.status(200).json({ success: true, usdPrice: usdPrice.toString(), targets, athData });
+    const athMcData = await fetchAthMarketCaps();
+    return res.status(200).json({ success: true, usdPrice: usdPrice.toString(), targets, athMcData });
   } catch (error) {
     return res.status(500).json({ error: "Contract call failed. Ensure it’s an ERC-20." });
   }
