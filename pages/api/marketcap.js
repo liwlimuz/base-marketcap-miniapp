@@ -2,25 +2,34 @@ import { ethers, isAddress } from "ethers";
 
 const RPC_URL = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
 const TARGETS = [0.1, 1, 10, 100];
-const CACHE_TTL = 60000; // 60 seconds
-
-const priceCache = {};
+const COINGECKO_IDS = ["bitcoin", "ethereum", "dogecoin"];
 
 async function fetchUsdPrice(address) {
-  const now = Date.now();
-  if (priceCache[address] && now - priceCache[address].ts < CACHE_TTL) {
-    return priceCache[address].price;
-  }
   try {
     const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${address}`);
     if (!res.ok) return 0;
     const json = await res.json();
-    const price = parseFloat(json?.pairs?.[0]?.priceUsd || "0") || 0;
-    priceCache[address] = { price, ts: now };
-    return price;
+    return parseFloat(json?.pairs?.[0]?.priceUsd || "0") || 0;
   } catch {
     return 0;
   }
+}
+
+async function fetchAthData() {
+  const data = [];
+  for (const id of COINGECKO_IDS) {
+    try {
+      const res = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
+      );
+      if (!res.ok) continue;
+      const json = await res.json();
+      const ath = json.market_data.ath.usd;
+      const athMc = json.market_data.ath_market_cap.usd;
+      data.push({ coin: id, ath, athMc });
+    } catch {}
+  }
+  return data;
 }
 
 export default async function handler(req, res) {
@@ -30,8 +39,9 @@ export default async function handler(req, res) {
   }
   const { contractAddress } = req.body;
   if (!contractAddress || !isAddress(contractAddress)) {
-    return res.status(400).json({ error: "Invalid contract address. Please enter a valid Base token contract." });
+    return res.status(400).json({ error: "Invalid contract address" });
   }
+
   try {
     const provider = new ethers.JsonRpcProvider(RPC_URL);
     const abi = [
@@ -39,7 +49,11 @@ export default async function handler(req, res) {
       "function decimals() view returns (uint8)"
     ];
     const token = new ethers.Contract(contractAddress, abi, provider);
-    const [rawSupply, decimals] = await Promise.all([token.totalSupply(), token.decimals()]);
+
+    const [rawSupply, decimals] = await Promise.all([
+      token.totalSupply(),
+      token.decimals()
+    ]);
     const supply = parseFloat(ethers.formatUnits(rawSupply, decimals));
     const usdPrice = await fetchUsdPrice(contractAddress);
 
@@ -49,17 +63,15 @@ export default async function handler(req, res) {
       return { price: p.toString(), requiredMarketCap, timesAway };
     });
 
-    const priceError = usdPrice === 0 
-      ? "Couldn’t fetch price (DexScreener might not track this token yet)." 
-      : null;
+    const athData = await fetchAthData();
 
     return res.status(200).json({
       success: true,
       usdPrice: usdPrice.toString(),
-      priceError,
-      targets
+      targets,
+      athData
     });
   } catch (err) {
-    return res.status(500).json({ error: "Not an ERC-20: this contract doesn’t expose totalSupply()." });
+    return res.status(500).json({ error: "Contract call failed" });
   }
 }

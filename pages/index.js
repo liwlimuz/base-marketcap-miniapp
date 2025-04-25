@@ -5,17 +5,17 @@ export default function Home() {
   const [contractAddress, setContractAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [priceError, setPriceError] = useState("");
   const [priceInfo, setPriceInfo] = useState("");
   const [targetsData, setTargetsData] = useState([]);
+  const [athData, setAthData] = useState([]);
   const [marketCap1, setMarketCap1] = useState("");
 
   const calculate = async () => {
     setLoading(true);
     setError("");
-    setPriceError("");
     setPriceInfo("");
     setTargetsData([]);
+    setAthData([]);
     setMarketCap1("");
 
     try {
@@ -27,31 +27,22 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unknown error");
 
-      if (data.priceError) {
-        setPriceError(data.priceError);
-      }
-
       const one = data.targets.find((t) => t.price === "1");
-      setMarketCap1(one?.requiredMarketCap || "");
+      if (one) setMarketCap1(one.requiredMarketCap);
 
       if (data.usdPrice && one?.timesAway) {
         setPriceInfo(
           `Current price $${Number(data.usdPrice).toFixed(6)} -> x${one.timesAway} away from $1`
         );
       }
+
       setTargetsData(data.targets);
+      setAthData(data.athData);
     } catch (e) {
       setError(e.message);
     } finally {
       setLoading(false);
     }
-  };
-
-  // Helper to format timesAway
-  const formatFactor = (factorStr) => {
-    const factor = parseFloat(factorStr);
-    if (isNaN(factor)) return factorStr;
-    return factor >= 10 ? Math.round(factor) : factor.toFixed(1);
   };
 
   return (
@@ -64,9 +55,7 @@ export default function Home() {
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full max-w-[340px] md:max-w-[600px] lg:max-w-[700px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
-          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">
-            $ Price Targets
-          </h1>
+          <h1 className="text-center text-3xl font-black text-purple-700 mb-6">$ Price Targets</h1>
           <input
             type="text"
             value={contractAddress}
@@ -87,30 +76,32 @@ export default function Home() {
             </div>
           )}
           {priceInfo && (
-            <div className="text-purple-700 text-center text-base mb-4 font-mono">
-              {priceInfo}
-            </div>
-          )}
-          {priceError && (
-            <div className="text-yellow-600 text-center text-base mb-4">
-              {priceError}
-            </div>
+            <div className="text-purple-700 text-center text-base mb-4 font-mono">{priceInfo}</div>
           )}
           {error && (
-            <div className="text-red-600 text-center text-base mb-4">
-              {error}
-            </div>
+            <div className="text-red-600 text-center text-base mb-4">{error}</div>
           )}
           {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-purple-100 rounded-2xl p-4 text-center">
                   <div className="font-semibold text-lg">$ {t.price}</div>
-                  <div className="text-[0.75rem] font-mono mt-1">
-                    x{formatFactor(t.timesAway)}
-                  </div>
+                  <div className="text-[0.75rem] font-mono mt-1">x{t.timesAway}</div>
                 </div>
               ))}
+            </div>
+          )}
+          {athData.length > 0 && (
+            <div className="bg-white/90 rounded-xl p-4">
+              <h2 className="text-center text-xl font-bold mb-2">Coin ATHs</h2>
+              <ul className="list-disc list-inside text-sm">
+                {athData.map((a) => (
+                  <li key={a.coin}>
+                    {a.coin.toUpperCase()} ATH: ${Number(a.ath).toLocaleString()} (MC: $
+                    {Number(a.athMc).toLocaleString()})
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
         </div>
