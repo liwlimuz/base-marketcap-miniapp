@@ -28,7 +28,9 @@ export default function Home() {
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
       if (data.usdPrice && data.timesAway) {
-        setPriceInfo(`Current price $${Number(data.usdPrice).toFixed(6)} -> ×${data.timesAway} away from $1`);
+        setPriceInfo(
+          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${data.timesAway} away from $1`
+        );
       }
       if (data.targets) setTargetsData(data.targets);
     } catch (e) {
@@ -46,7 +48,7 @@ export default function Home() {
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full max-w-[340px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h1 className="text-center text-2xl font-black tracking-wide text-[#0052FF] mb-4">
+          <h1 className="text-center text-2xl font-black tracking-wide text-white mb-4">
             Price Targets
           </h1>
 
@@ -60,7 +62,7 @@ export default function Home() {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.02] transition disabled:opacity-60"
+            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
           >
             {loading ? "Calculating…" : "Calculate"}
           </button>
@@ -72,7 +74,7 @@ export default function Home() {
           )}
 
           {priceInfo && (
-            <div className="text-white/90 text-center text-sm mt-2 font-mono">
+            <div className="text-white text-center text-sm mt-2 font-mono">
               {priceInfo}
             </div>
           )}
@@ -81,7 +83,7 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-2 mt-4">
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
-                  <div className="font-semibold">${t.price}</div>
+                  <div className="font-semibold">$ {t.price}</div>
                   <div className="text-xs font-mono">×{t.timesAway}</div>
                 </div>
               ))}
