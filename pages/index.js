@@ -24,14 +24,17 @@ export default function Home() {
 
   const fetchAthMcClient = async () => {
     const results = [];
-    for (const id of COINGECKO_IDS) {
+    for (let i = 0; i < COINGECKO_IDS.length; i++) {
+      const id = COINGECKO_IDS[i];
       try {
-        const res = await fetch(
-          \`https://api.coingecko.com/api/v3/coins/\${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false\`
-        );
+        const url = "https://api.coingecko.com/api/v3/coins/" + id +
+          "?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+        const res = await fetch(url);
         if (!res.ok) continue;
         const json = await res.json();
-        results.push({ coin: id.toUpperCase(), athMc: json.market_data.ath_market_cap.usd });
+        if (json && json.market_data && json.market_data.ath_market_cap && json.market_data.ath_market_cap.usd) {
+          results.push({ coin: id.toUpperCase(), athMc: json.market_data.ath_market_cap.usd });
+        }
       } catch {}
     }
     return results;
@@ -57,13 +60,13 @@ export default function Home() {
       const one = data.targets.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
 
-      if (data.usdPrice && one?.timesAway) {
+      if (data.usdPrice && one && one.timesAway) {
         setPriceInfo(
-          \`Current price $\${Number(data.usdPrice).toFixed(6)} -> x\${one.timesAway} away from $1\`
+          "Current price $" + Number(data.usdPrice).toFixed(6) + " -> x" + one.timesAway + " away from $1"
         );
       }
-      setTargetsData(data.targets);
 
+      setTargetsData(data.targets || []);
       const athResults = await fetchAthMcClient();
       setAthMcData(athResults);
     } catch (e) {

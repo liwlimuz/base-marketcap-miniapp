@@ -8,7 +8,7 @@ async function fetchUsdPrice(address) {
     const res = await fetch("https://api.dexscreener.com/latest/dex/tokens/" + address);
     if (!res.ok) return 0;
     const json = await res.json();
-    return parseFloat(json?.pairs?.[0]?.priceUsd || "0") || 0;
+    return parseFloat(json && json.pairs && json.pairs[0] && json.pairs[0].priceUsd ? json.pairs[0].priceUsd : "0") || 0;
   } catch {
     return 0;
   }
