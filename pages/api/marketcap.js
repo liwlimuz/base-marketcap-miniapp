@@ -6,11 +6,11 @@ export default async function handler(req, res) {
       fetchAthData(address)
     ]);
 
-    // TODO: replace with real logic for computing targets based on total supply
+    // Placeholder targets logic (replace with real supply-based calc)
     const targets = [
-      { price: '0.1', timesAway: (usdPrice ? (0.1 / usdPrice).toFixed(2) : 0), requiredMarketCap: 0 },
-      { price: '1', timesAway: (usdPrice ? (1 / usdPrice).toFixed(2) : 0), requiredMarketCap: 0 },
-      { price: '10', timesAway: (usdPrice ? (10 / usdPrice).toFixed(2) : 0), requiredMarketCap: 0 }
+      { price: '0.1', timesAway: usdPrice ? (0.1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
+      { price: '1', timesAway: usdPrice ? (1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
+      { price: '10', timesAway: usdPrice ? (10 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 }
     ];
 
     res.status(200).json({ usdPrice, targets, athMcData: athData });
