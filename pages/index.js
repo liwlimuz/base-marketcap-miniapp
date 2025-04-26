@@ -43,12 +43,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Base Price Targets</title>
+        <title>Base Dollar Targets</title>
         <meta property="og:image" content="/og.png" />
       </Head>
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full max-w-[340px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h1 className="text-center text-2xl font-black tracking-wide text-white mb-4">
+        <div className="w-full sm:max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+          <h1 className="text-[#8E2DE2] text-3xl font-black tracking-wide text-white mb-4">
             Price Targets
           </h1>
 
