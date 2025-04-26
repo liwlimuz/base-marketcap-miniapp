@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
-import { useState } from "react";
 
 export default function Home() {
   const [toast, setToast] = useState('');
