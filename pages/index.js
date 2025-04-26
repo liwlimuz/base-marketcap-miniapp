@@ -61,7 +61,7 @@ export default function Home() {
 
           <input
             value={contractAddress}
-            onChange={(e) => setContractAddress(e.target.value)}
+            onChange={(e) = onKeyDown={(e) => { if (e.key === 'Enter') calculate(); }}> setContractAddress(e.target.value)}
             placeholder="0x… token address"
             className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
           />
