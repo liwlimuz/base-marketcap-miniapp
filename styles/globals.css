@@ -3,4 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-.font-heading { @apply font-poppins; }
+
+
+@layer utilities {
+  .font-heading { @apply font-poppins; }
+}
+
