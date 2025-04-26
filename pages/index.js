@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 
 export default function Home(){
   const [address,setAddress]=useState('');
@@ -17,6 +18,8 @@ export default function Home(){
   }
 
   return(
+    <>
+      <Head><title>Base Dollar Targets</title><link rel="icon" href="/favicon.png" /></Head>
     <div className="fixed inset-0 flex items-center justify-center p-6 overflow-auto bg-gradient-to-br from-baseblue to-warppurple">
       <div className="w-full max-w-xl bg-white/10 backdrop-blur-xs shadow-glass rounded-3xl p-8">
         <h1 className="text-4xl font-bold text-center text-gray-50 mb-6">Market Cap Calculator</h1>
@@ -28,7 +31,11 @@ export default function Home(){
           Calculate
         </button>
 
-        {error && <p className="text-red-300 text-center mt-4">{error}</p>}
+        {error && (
+  <div className="bg-red-500/20 border border-red-400/50 text-red-200 rounded-lg p-3 text-center mb-4">
+    {error}
+  </div>
+)}
 
         {data && (
           <div className="mt-8 space-y-6">
