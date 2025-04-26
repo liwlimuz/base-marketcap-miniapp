@@ -8,6 +8,10 @@ export default function Home() {
 
   const fetchData = async () => {
     setError('');
+    if (!address.startsWith('0x')) {
+      setError('Please enter a valid 0x address');
+      return;
+    }
     try {
       const res = await fetch('/api/marketcap?address=' + address.trim());
       const json = await res.json();
@@ -26,7 +30,7 @@ export default function Home() {
 
         <input
           value={address}
-          onChange={e => setAddress(e.target.value)}
+          onChange={(e) => setAddress(e.target.value)}
           placeholder="Paste token address (0x...)"
           className="w-full mb-4 p-3 border rounded-lg shadow-inner"
         />
@@ -47,7 +51,7 @@ export default function Home() {
             <div>
               <h2 className="font-semibold mb-1">Targets</h2>
               <ul className="flex flex-wrap gap-2">
-                {data.targets.map(t => (
+                {data.targets.map((t) => (
                   <li key={t.price} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
                     ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
                   </li>
