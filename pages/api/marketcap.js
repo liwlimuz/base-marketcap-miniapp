@@ -10,8 +10,8 @@ export default async function handler(req, res) {
     ]);
     const targets = [
       { price: '0.1', timesAway: usdPrice ? (0.1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
-      { price: '1',   timesAway: usdPrice ? (1 / usdPrice).toFixed(2) : 0,   requiredMarketCap: 0 },
-      { price: '10',  timesAway: usdPrice ? (10 / usdPrice).toFixed(2) : 0,  requiredMarketCap: 0 },
+      { price: '1',   timesAway: usdPrice ? (1 / usdPrice).toFixed(2)   : 0, requiredMarketCap: 0 },
+      { price: '10',  timesAway: usdPrice ? (10 / usdPrice).toFixed(2)  : 0, requiredMarketCap: 0 },
       { price: '100', timesAway: usdPrice ? (100 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
     ];
     res.status(200).json({ usdPrice, targets, athMcData: athData });

@@ -9,7 +9,7 @@ export default function Home() {
   const fetchData = async () => {
     setError('');
     if (!address.startsWith('0x')) {
-      setError('Enter a valid 0x address');
+      setError('Invalid address');
       return;
     }
     try {
@@ -49,7 +49,7 @@ export default function Home() {
 
           {error && (
             <div className="mt-4 bg-red-500/20 border border-red-400/50 text-red-200 rounded-lg p-3 text-center">
-              {error}
+              ⚠️ {error}. Please double-check the token address and try again.
             </div>
           )}
 
@@ -61,29 +61,27 @@ export default function Home() {
               <div>
                 <h2 className="font-semibold text-gray-50 mb-2">Targets</h2>
                 <ul className="flex flex-wrap gap-3">
-                  
-{data.targets.map(t => (
-  <li
-    key={t.price}
-    style={
-      t.price === '1'
-        ? { backgroundColor: '#C0C0C0', backdropFilter: 'blur(6px)', zIndex: 10 }
-        : null
-    }
-    className={
-      'px-3 py-1 rounded-full text-sm shadow-inner transition-transform transform ' +
-      (t.price === '1'
-        ? 'text-gray-900 ring-1 ring-white/80 shadow-lg hover:-translate-y-2'
-        : 'bg-white/20 hover:bg-white/30 text-blue-100 hover:-translate-y-1')
-    }
-  >
-    ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
-  </li>
-))}
-
+                  {data.targets.map(t => (
+                    <li
+                      key={t.price}
+                      style={
+                        t.price === '1'
+                          ? {{ backgroundColor: '#C0C0C0', backdropFilter: 'blur(6px)', zIndex: 10 }}
+                          : {}
+                      }
+                      className={
+                        'px-3 py-1 rounded-full text-sm shadow-inner transition-transform transform ' +
+                        (t.price === '1'
+                          ? 'text-gray-900 ring-1 ring-white/80 shadow-lg hover:-translate-y-2'
+                          : 'bg-white/20 hover:bg-white/30 text-blue-100 hover:-translate-y-1')
+                      }
+                    >
+                      ${'{'}t.price{'}'} → {'{'}t.timesAway{'}'}× → ${'{'}t.requiredMarketCap{'}'}
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <div className="text-gray-50"> {/* ATH */}
+              <div className="text-gray-50">
                 <h2 className="font-semibold mb-2">All-Time High</h2>
                 <p>ATH Price: ${'{'}Number(data.athMcData.athPrice).toFixed(6){'}'}</p>
                 <p>ATH Market Cap: ${'{'}Number(data.athMcData.athMarketCap).toLocaleString(){'}'}</p>
@@ -93,5 +91,5 @@ export default function Home() {
         </div>
       </div>
     </>
-);
+  );
 }
