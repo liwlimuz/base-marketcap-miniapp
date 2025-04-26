@@ -1,112 +1,67 @@
-import Head from "next/head";
-import { useState } from "react";
+
+import { useState } from 'react';
 
 export default function Home() {
-  const [contractAddress, setContractAddress] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [priceInfo, setPriceInfo] = useState("");
-  const [targetsData, setTargetsData] = useState([]);
-  const [marketCap1, setMarketCap1] = useState("");
+  const [address, setAddress] = useState('');
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
 
-  const calculate = async () => {
-    setLoading(true);
-    setError("");
-    setPriceInfo("");
-    setTargetsData([]);
-    setMarketCap1("");
-
+  const fetchData = async () => {
+    setError('');
     try {
-      const response = await fetch("/api/marketcap", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractAddress: contractAddress.trim() }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Unknown error");
-
-      const oneTarget = data.targets.find((t) => t.price === "1");
-      if (oneTarget) {
-        setMarketCap1(oneTarget.requiredMarketCap);
-      }
-
-      if (data.usdPrice && oneTarget.timesAway) {
-        setPriceInfo(
-          "Current price $" +
-            Number(data.usdPrice).toFixed(6) +
-            " -> x" +
-            oneTarget.timesAway +
-            " away from $1"
-        );
-      }
-
-      if (data.targets) {
-        setTargetsData(data.targets);
-      }
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
+      const res = await fetch('/api/marketcap?address=' + address.trim());
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Unknown error');
+      setData(json);
+    } catch (err) {
+      setError(err.message);
+      setData(null);
     }
   };
 
   return (
-    <>
-      <Head>
-        <title>Base Price Targets</title>
-        <meta property="og:image" content="/og.png" />
-      </Head>
-      <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full max-w-[340px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h1 className="text-center text-2xl font-black tracking-wide text-purple-700 mb-4">
-            Price Targets
-          </h1>
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-xl bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6">
+        <h1 className="text-3xl font-bold text-center mb-6">Market Cap Calculator</h1>
 
-          <input
-            type="text"
-            value={contractAddress}
-            onChange={(e) => setContractAddress(e.target.value)}
-            placeholder="0x... token address"
-            className="w-full px-3 py-2 border rounded-lg text-sm bg-white/70"
-          />
+        <input
+          value={address}
+          onChange={e => setAddress(e.target.value)}
+          placeholder="Paste token address (0x...)"
+          className="w-full mb-4 p-3 border rounded-lg shadow-inner"
+        />
+        <button
+          onClick={fetchData}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium"
+        >
+          Calculate
+        </button>
 
-          <button
-            onClick={calculate}
-            disabled={loading}
-            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
-          >
-            {loading ? "Calculating..." : "Calculate"}
-          </button>
+        {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
 
-          {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-lg text-center mt-4">
-              Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()} USD
+        {data && (
+          <div className="mt-6 space-y-4">
+            <p className="text-lg font-medium text-center">
+              Current Price: <span className="font-mono">${Number(data.usdPrice).toFixed(6)}</span>
+            </p>
+            <div>
+              <h2 className="font-semibold mb-1">Targets</h2>
+              <ul className="flex flex-wrap gap-2">
+                {data.targets.map(t => (
+                  <li key={t.price} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                    ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
+                  </li>
+                ))}
+              </ul>
             </div>
-          )}
-
-          {priceInfo && (
-            <div className="text-purple-700 text-center text-sm mt-2 font-mono">
-              {priceInfo}
+            <div>
+              <h2 className="font-semibold mb-1">All-Time High</h2>
+              <p>ATH Price: ${Number(data.athMcData.athPrice).toFixed(6)}</p>
+              <p>ATH Market Cap: ${Number(data.athMcData.athMarketCap).toLocaleString()}</p>
             </div>
-          )}
-
-          {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">
-              {targetsData.map((t) => (
-                <div
-                  key={t.price}
-                  className="bg-purple-100 rounded-xl p-2 text-center"
-                >
-                  <div className="font-semibold">$ {t.price}</div>
-                  <div className="text-xs font-mono">x{t.timesAway}</div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
-        </div>
-      </main>
-    </>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
