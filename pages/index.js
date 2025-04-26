@@ -49,7 +49,7 @@ export default function Home() {
 
           {error && (
             <div className="mt-4 bg-red-500/20 border border-red-400/50 text-red-200 rounded-lg p-3 text-center">
-              {error}
+              ⚠️ {error}. Please double-check the token address and try again.
             </div>
           )}
 
@@ -66,7 +66,7 @@ export default function Home() {
                       key={t.price}
                       className={
                         t.price === '1'
-                          ? 'px-4 py-2 rounded-full text-sm bg-gray-200/40 backdrop-blur-sm text-gray-900 ring-1 ring-white/80 shadow-lg transition-transform transform hover:-translate-y-2'
+                          ? 'px-4 py-2 rounded-full text-sm bg-[#C0C0C0]/60 backdrop-blur-sm text-gray-900 ring-1 ring-white/90 shadow-lg transition-transform transform hover:-translate-y-2'
                           : 'px-3 py-1 rounded-full text-sm bg-white/20 hover:bg-white/30 text-blue-100 transition-transform transform hover:-translate-y-1'
                       }
                     >
