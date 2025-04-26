@@ -8,7 +8,7 @@ export default async function handler(req,res){
  res.setHeader("Access-Control-Allow-Origin","*");
  if(req.method!=="POST")return res.status(405).json({error:"POST only"});
  const {contractAddress}=req.body;
- if(!contractAddress||!isAddress(contractAddress))return res.status(400).json({error:"Invalid address"});
+ if(!contractAddress||!isAddress(contractAddress))return res.status(400).json({ error: "Invalid address. Please double-check the contract address, ensure it's a Base network token contract, and try again." });
  try{
   const provider=new ethers.JsonRpcProvider(RPC);
   const abi=["function totalSupply() view returns (uint256)","function decimals() view returns (uint8)"];

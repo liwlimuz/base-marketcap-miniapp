@@ -75,9 +75,7 @@ export default function Home() {
           </button>
 
           {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-lg text-center mt-4">
-              $1 Cap: <span className="font-bold ring-1 ring-emerald-300/50 p-1 rounded">${Number(marketCap1).toLocaleString()}</span>
-            </div>
+            <div className="text-emerald-600 font-mono text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
           )}
 
           {priceInfo && (
