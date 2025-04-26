@@ -46,9 +46,9 @@ export default function Home() {
         <title>Base Dollar Targets</title>
         <meta property="og:image" content="/og.png" />
       </Head>
-      <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full sm:max-w-[450px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
-          <h1 className="text-[#8E2DE2] text-3xl font-black tracking-wide text-white mb-4">
+      <main className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
+        <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
+          <h1 className="text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-white mb-4">
             Price Targets
           </h1>
 
@@ -56,13 +56,13 @@ export default function Home() {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="0x… token address"
-            className="w-full px-3 py-2 border rounded-lg text-sm bg-white/70"
+            className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg text-sm bg-white/70"
           />
 
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
+            className="w-full mt-3 bg-[#0052FF] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
           >
             {loading ? "Calculating…" : "Calculate"}
           </button>
