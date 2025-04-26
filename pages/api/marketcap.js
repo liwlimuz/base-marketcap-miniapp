@@ -1,48 +1,23 @@
-
-export default async function handler(req, res) {
-  const { address } = req.query;
-  if (!address || !address.startsWith('0x')) {
-    return res.status(400).json({ error: 'Invalid address' });
-  }
-
-  try {
-    const [usdPrice, athData] = await Promise.all([
-      fetchUsdPrice(address),
-      fetchAthData(address)
-    ]);
-    const targets = [
-      { price: '100', timesAway: usdPrice ? (100 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
-      { price: '0.1', timesAway: usdPrice ? (0.1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
-      { price: '1',   timesAway: usdPrice ? (1 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 },
-      { price: '10',  timesAway: usdPrice ? (10 / usdPrice).toFixed(2) : 0, requiredMarketCap: 0 }
-    ];
-    res.status(200).json({ usdPrice, targets, athMcData: athData });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+import { ethers, isAddress } from "ethers";
+const RPC="https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
+const TARGETS=[0.1,1,10];
+async function getPrice(addr){
+ try{const r=await fetch(`https://api.dexscreener.com/latest/dex/tokens/${addr}`);if(!r.ok)return 0;const j=await r.json();return parseFloat(j?.pairs?.[0]?.priceUsd||"0")||0;}catch{return 0;}
 }
-
-async function fetchUsdPrice(address) {
-  try {
-    const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/' + address);
-    if (!res.ok) return 0;
-    const json = await res.json();
-    return parseFloat(json.pairs[0].priceUsd) || 0;
-  } catch {
-    return 0;
-  }
-}
-
-async function fetchAthData(address) {
-  try {
-    const res = await fetch('https://api.coingecko.com/api/v3/coins/ethereum/contract/' + address);
-    if (!res.ok) return { athPrice: 0, athMarketCap: 0 };
-    const json = await res.json();
-    return {
-      athPrice: json.market_data?.ath?.usd || 0,
-      athMarketCap: json.market_data?.ath?.market_cap?.usd || 0
-    };
-  } catch {
-    return { athPrice: 0, athMarketCap: 0 };
-  }
+export default async function handler(req,res){
+ res.setHeader("Access-Control-Allow-Origin","*");
+ if(req.method!=="POST")return res.status(405).json({error:"POST only"});
+ const {contractAddress}=req.body;
+ if(!contractAddress||!isAddress(contractAddress))return res.status(400).json({error:"Invalid address"});
+ try{
+  const provider=new ethers.JsonRpcProvider(RPC);
+  const abi=["function totalSupply() view returns (uint256)","function decimals() view returns (uint8)"];
+  const token=new ethers.Contract(contractAddress,abi,provider);
+  const [raw,decimals]=await Promise.all([token.totalSupply(),token.decimals()]);
+  const supply=parseFloat(ethers.formatUnits(raw,decimals));
+  const usd=await getPrice(contractAddress);
+  const timesAway=usd?(1/usd).toFixed(2):null;
+  const targets=TARGETS.map(p=>({price:p.toString(),requiredMarketCap:(supply*p).toString(),timesAway:usd?(p/usd).toFixed(2):null}));
+  res.status(200).json({usdPrice:usd.toString(),timesAway,targets});
+ }catch{res.status(500).json({error:"call failed"});}
 }
