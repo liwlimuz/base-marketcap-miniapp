@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function Home() {
   const [contractAddress, setContractAddress] = useState("");
   const [loading, setLoading] = useState(false);
+  const [valid, setValid] = useState(true);
   const [error, setError] = useState("");
   const [priceInfo, setPriceInfo] = useState("");
   const [targetsData, setTargetsData] = useState([]);
@@ -62,8 +63,13 @@ export default function Home() {
           
           <input
             value={contractAddress}
-            onChange={e => setContractAddress(e.target.value)}
-            onKeyDown={e => {
+            onChange={e => {
+              const v = e.target.value;
+              setContractAddress(v);
+              setValid(/^0x[a-fA-F0-9]{40}$/.test(v));
+            }}
+            onKeyDown={e => { if (e.key === 'Enter') calculate(); }}
+                onKeyDown={e => {
               if (e.key === 'Enter') calculate();
             }}
             placeholder="0x… token address"
@@ -71,7 +77,8 @@ export default function Home() {
           />
 
 
-          <button
+          
+          {!valid && <p className="text-red-500 text-sm mt-2">Please enter a valid Base token contract address.</p>}<button
             onClick={calculate}
             disabled={loading}
             className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
