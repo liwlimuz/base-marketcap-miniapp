@@ -45,17 +45,22 @@ export default function Home() {
 
   return (
     <>
+      
       <Head>
         <title>Base Dollar Targets</title>
-        <meta name="description" content="Quickly see how far your Base token is from $1 and its supply-based market cap." />
-        <meta property="og:title" content="Base Dollar Targets" />
-        <meta property="og:description" content="Enter a Base token address to get instant price & market cap benchmarks." />
+        <meta name="description" content="Calculate market cap targets for Base chain tokens instantly." />
+        <meta property="og:title" content="Base Dollar MC Alpha" />
+        <meta property="og:description" content="See how large a token's market cap needs to be to reach $1, $10, etc., on the Base network." />
         <meta property="og:image" content="/og.png" />
-        <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-
-        <meta property="og:image" content="/og.png" />
+        <link rel="canonical" href="https://base-marketcap-miniapp.vercel.app/" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" as="style" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+        <link rel="preload" href="/og.png" as="image" />
+        <!-- Plausible Analytics -->
+        <script async defer data-domain="base-marketcap-miniapp.vercel.app" src="https://plausible.io/js/plausible.js"></script>
       </Head>
+
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
           <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base Dollar Targets</h1>
