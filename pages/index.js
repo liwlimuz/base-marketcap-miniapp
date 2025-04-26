@@ -1,11 +1,9 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
 
-export default function Home() {
-  const [toast, setToast] = useState('');
-  const [valid, setValid] = useState(true);
+export default function Home() {const [valid, setValid] = useState(true);
 
   const [contractAddress, setContractAddress] = useState("");
   const [loading, setLoading] = useState(false);
@@ -74,39 +72,7 @@ export default function Home() {
           />
 
 
-          <button
-            onClick={calculate}
-            disabled={loading}
-            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] active:scale-95 transition disabled:opacity-60 flex items-center justify-center"
->
-            {loading ? <span className="spinner" aria-label="Loading"></span> : "Calculate"}
-          </button>
-
-          {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
-          )}
-
-          {priceInfo && (
-            <div className="text-white text-center text-sm mt-2 font-mono">
-              {priceInfo}
-            </div>
-          )}
-
-          {targetsData.length > 0 && (
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {targetsData.map((t) => (
-              <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center relative">
-                <div className="font-semibold">$ {t.price}</div>
-                <div className="text-xs font-mono">×{t.timesAway}</div>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(t.timesAway);
-                    setToast(`Copied ×${t.timesAway}`);
-                    setTimeout(() => setToast(''), 2000);
-                  }}
-                  aria-label={`Copy ×${t.timesAway}`}
-                  className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
-                >📋</button>
+          
               </div>
             ))}
           </div>
