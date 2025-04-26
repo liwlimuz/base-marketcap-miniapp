@@ -88,13 +88,16 @@ const item = {
             {loading ? "Calculating…" : "Calculate"}
           </button>
 
-          <motion.div variants={item}>{marketCap1 && (
+{marketCap1 && (
+  <motion.div variants={item}>
             <div className="text-emerald-600 font-mono text-lg text-center mt-4 font-bold ring-1 ring-emerald-300/50 p-1 rounded">
-              $1 Cap: ${Number(marketCap1).toLocaleString()}
+    <div className="text-emerald-600 font-mono text-lg text-center mt-4 font-bold ring-1 ring-emerald-300/50 p-1 rounded">
+$1 Cap: ${Number(marketCap1).toLocaleString()}
             </motion.div>
           )}
 
-          <motion.div variants={item}>{priceInfo && (
+{priceInfo && (
+  <motion.div variants={item}>
             <div className="text-white text-center text-sm mt-2 font-mono">
               {priceInfo}
             </div></motion.div></motion.div>
