@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { motion } from 'framer-motion';
+import { DollarSign } from 'lucide-react';
 import { useState } from "react";
 
 export default function Home() {
@@ -46,7 +48,7 @@ export default function Home() {
         <title>Base Dollar Targets</title>
         <meta property="og:image" content="/og.png" />
       </Head>
-      <main className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
+      <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
           <h1 className="text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base Dollar Targets</h1>
 
@@ -54,13 +56,13 @@ export default function Home() {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="0x… token address"
-            className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg text-sm bg-white/70"
+            className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
           />
 
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
+            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
           >
             {loading ? "Calculating…" : "Calculate"}
           </button>
@@ -80,7 +82,7 @@ export default function Home() {
           {targetsData.length > 0 && (
             <div className="grid grid-cols-2 gap-2 mt-4">
               {targetsData.map((t) => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center">
+                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105">
                   <div className="font-semibold">$ {t.price}</div>
                   <div className="text-xs font-mono">×{t.timesAway}</div>
                 </div>
@@ -90,7 +92,7 @@ export default function Home() {
 
           {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
         </div>
-      </main>
+      </motion.main>
     </>
   );
 }
