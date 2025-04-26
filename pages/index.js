@@ -94,22 +94,24 @@ export default function Home() {
           )}
 
           {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              {targetsData.map((t) => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105 relative">
-                  
-                  <div className="font-semibold">$ {t.price}</div>
-                  <div className="text-xs font-mono">×{t.timesAway}</div>
-                
-                  <button
-                    onClick={() => { navigator.clipboard.writeText(t.timesAway); setToast('Copied ×' + t.timesAway); setTimeout(() => setToast(''), 2000); }}
-                    aria-label={"Copy ×" + t.timesAway}
-                    className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
-                  >📋</button>
-                </div>
-              ))}}
-            </div>
-          )}
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            {targetsData.map((t) => (
+              <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center relative">
+                <div className="font-semibold">$ {t.price}</div>
+                <div className="text-xs font-mono">×{t.timesAway}</div>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(t.timesAway);
+                    setToast(`Copied ×${t.timesAway}`);
+                    setTimeout(() => setToast(''), 2000);
+                  }}
+                  aria-label={`Copy ×${t.timesAway}`}
+                  className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
+                >📋</button>
+              </div>
+            ))}
+          </div>
+        )}
 
           {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
         </div>
