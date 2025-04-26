@@ -60,7 +60,7 @@ export default function Home() {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#0052FF] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
+            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition disabled:opacity-60"
           >
             {loading ? "Calculating…" : "Calculate"}
           </button>
