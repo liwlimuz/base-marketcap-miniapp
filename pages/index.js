@@ -59,12 +59,17 @@ export default function Home() {
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
           <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base Dollar Targets</h1>
 
+          
           <input
             value={contractAddress}
-            onChange={(e) => setContractAddress(e.target.value)}
+            onChange={e => setContractAddress(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') calculate();
+            }}
             placeholder="0x… token address"
             className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
           />
+
 
           <button
             onClick={calculate}
