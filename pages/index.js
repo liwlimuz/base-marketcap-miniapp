@@ -28,20 +28,11 @@ export default function Home() {
       <Head>
         <title>Base Dollar Targets</title>
         <link rel="icon" href="/favicon.ico" />
-      <style>{`
-        .main-pill {
-          background-color: #C0C0C0 !important;
-          backdrop-filter: blur(6px) !important;
-          z-index: 10 !important;
-        }
-      `}</style>
       </Head>
 
       <div className="fixed inset-0 flex items-center justify-center p-6 overflow-auto bg-gradient-to-br from-baseblue to-warppurple">
         <div className="w-full max-w-xl bg-white/10 backdrop-blur-xs shadow-glass rounded-3xl p-8">
-          <div className="inline-block bg-[#C0C0C0] text-gray-900 px-4 py-2 rounded-full shadow-lg mx-auto mb-6">
-            Market Cap Calculator
-          </div>
+          <h1 className="inline-block bg-gray-200/40 backdrop-blur-sm text-gray-900 ring-1 ring-white/80 shadow-glass px-4 py-2 rounded-full mx-auto mb-6 text-4xl font-bold text-center">Market Cap Calculator</h1>
 
           <input
             value={address}
@@ -71,7 +62,6 @@ export default function Home() {
                 <h2 className="font-semibold text-gray-50 mb-2">Targets</h2>
                 <ul className="flex flex-wrap gap-3">
                   
-
 {data.targets.map(t => (
   <li
     key={t.price}
@@ -80,7 +70,6 @@ export default function Home() {
     ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
   </li>
 ))}
-
 
                 </ul>
               </div>
