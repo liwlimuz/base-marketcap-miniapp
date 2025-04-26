@@ -57,7 +57,7 @@ export default function Home() {
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" as="style" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
         <link rel="preload" href="/og.png" as="image" />
-        <!-- Plausible Analytics -->
+        {/* Plausible Analytics */}
         <script async defer data-domain="base-marketcap-miniapp.vercel.app" src="https://plausible.io/js/plausible.js"></script>
       </Head>
 
