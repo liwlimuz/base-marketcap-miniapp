@@ -3,6 +3,8 @@ module.exports = {
   content: ['./pages/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+    },
+  safelist: ['bg-gray-300','ring-2','ring-white','hover:-translate-y-2'],
       colors: {
         baseblue: '#0052FF',
         warppurple: '#8E2DE2',
