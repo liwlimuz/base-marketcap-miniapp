@@ -16,7 +16,7 @@ body {
 }
 
 .main-bg {
-  background: linear-gradient(-45deg, #004CFF, #7A5CFF, #8E2DE2, #4A00E0);
+  background: linear-gradient(-45deg, #004CFF 0%, #7A5CFF 33%, #4A00E0 66%, #004CFF 100%);
   background-size: 400% 400%;
   animation: gradientShift 20s ease infinite;
 }
