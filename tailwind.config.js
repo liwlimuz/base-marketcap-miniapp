@@ -1,10 +1,10 @@
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./pages/**/*.{js,ts,jsx,tsx}'],
+  safelist: ['bg-gray-300','ring-2','ring-white','hover:-translate-y-2'],
   theme: {
     extend: {
-    },
-  safelist: ['bg-gray-300','ring-2','ring-white','hover:-translate-y-2'],
       colors: {
         baseblue: '#0052FF',
         warppurple: '#8E2DE2',
@@ -14,7 +14,7 @@ module.exports = {
       },
       backdropBlur: {
         xs: '2px',
-      }
+      },
     },
   },
   plugins: [],
