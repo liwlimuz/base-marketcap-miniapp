@@ -1,10 +1,9 @@
 import Head from "next/head";
-import { useState } from "react";
 import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
+import { useState } from "react";
 
-export default function Home() {const [valid, setValid] = useState(true);
-
+export default function Home() {
   const [contractAddress, setContractAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -72,11 +71,34 @@ export default function Home() {const [valid, setValid] = useState(true);
           />
 
 
-          
-              </div>
-            ))}
-          </div>
-        )}
+          <button
+            onClick={calculate}
+            disabled={loading}
+            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
+          >
+            {loading ? "Calculating…" : "Calculate"}
+          </button>
+
+          {marketCap1 && (
+            <div className="text-emerald-600 font-mono text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
+          )}
+
+          {priceInfo && (
+            <div className="text-white text-center text-sm mt-2 font-mono">
+              {priceInfo}
+            </div>
+          )}
+
+          {targetsData.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              {targetsData.map((t) => (
+                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105">
+                  <div className="font-semibold">$ {t.price}</div>
+                  <div className="text-xs font-mono">×{t.timesAway}</div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
         </div>
