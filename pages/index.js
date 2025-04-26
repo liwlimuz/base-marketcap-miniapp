@@ -1,5 +1,12 @@
-import { useState } from 'react';
 import Head from 'next/head';
+
+export default function Home() {
+  return (
+    <>
+      <Head>
+        <title>Base Dollar Targets</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
 export default function Home(){
   const [address,setAddress]=useState('');
@@ -19,7 +26,7 @@ export default function Home(){
 
   return(
     <>
-      <Head><title>Base Dollar Targets</title><link rel="icon" href="/favicon.ico" /></Head>
+      <Head></Head>
     <div className="fixed inset-0 flex items-center justify-center p-6 overflow-auto bg-gradient-to-br from-baseblue to-warppurple">
       <div className="w-full max-w-xl bg-white/10 backdrop-blur-xs shadow-glass rounded-3xl p-8">
         <h1 className="text-4xl font-bold text-center text-gray-50 mb-6">Market Cap Calculator</h1>
@@ -67,5 +74,8 @@ export default function Home(){
         )}
       </div>
     </div>
+  );
+
+    </>
   );
 }
