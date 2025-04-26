@@ -1,9 +1,23 @@
 import Head from "next/head";
 import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
 import { useState } from "react";
 
 export default function Home() {
+
+const container = {
+  hidden: { opacity: 0 },
+  show: { 
+    opacity: 1, 
+    transition: { staggerChildren: 0.2 }
+  }
+};
+const item = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0 }
+};
+
   const [contractAddress, setContractAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -46,10 +60,17 @@ export default function Home() {
     <>
       <Head>
         <title>Base Dollar Targets</title>
+        <meta name="description" content="Quickly see how far your Base token is from $1 and its supply-based market cap." />
+        <meta property="og:title" content="Base Dollar Targets" />
+        <meta property="og:description" content="Enter a Base token address to get instant price & market cap benchmarks." />
+        <meta property="og:image" content="/og.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+
         <meta property="og:image" content="/og.png" />
       </Head>
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
+        <motion.div variants={container} initial="hidden" animate="show" div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
           <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base Dollar Targets</h1>
 
           <input
@@ -67,16 +88,16 @@ export default function Home() {
             {loading ? "Calculating…" : "Calculate"}
           </button>
 
-          {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-lg text-center mt-4">
+          <motion.div variants={item}>{marketCap1 && (
+            <div className="text-emerald-600 font-mono text-lg text-center mt-4 font-bold ring-1 ring-emerald-300/50 p-1 rounded">
               $1 Cap: ${Number(marketCap1).toLocaleString()}
-            </div>
+            </motion.div>
           )}
 
-          {priceInfo && (
+          <motion.div variants={item}>{priceInfo && (
             <div className="text-white text-center text-sm mt-2 font-mono">
               {priceInfo}
-            </div>
+            </div></motion.div></motion.div>
           )}
 
           {targetsData.length > 0 && (
