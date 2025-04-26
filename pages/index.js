@@ -1,36 +1,41 @@
-
 import { useState } from 'react';
 
-export default function Home(){
-  const [address,setAddress]=useState('');
-  const [data,setData]=useState(null);
-  const [error,setError]=useState('');
+export default function Home() {
+  const [address, setAddress] = useState('');
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
 
-  async function fetchData(){
+  async function fetchData() {
     setError('');
-    if(!address.startsWith('0x')){setError('Enter valid 0x address');return;}
-    try{
-      const res=await fetch('/api/marketcap?address='+address.trim());
-      const json=await res.json();
-      if(!res.ok) throw new Error(json.error||'Error');
+    if (!address.startsWith('0x')) {
+      setError('Enter a valid 0x address');
+      return;
+    }
+    try {
+      const res = await fetch('/api/marketcap?address=' + address.trim());
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'API error');
       setData(json);
-    }catch(e){setError(e.message);setData(null);}
+    } catch (e) {
+      setError(e.message);
+      setData(null);
+    }
   }
 
   return (
-    <div className="flex items-center justify-center py-12">
-      <div className="w-full max-w-xl bg-white/10 shadow-glass backdrop-blur-xs rounded-3xl p-8">
-        <h1 className="text-4xl font-bold text-center mb-6 drop-shadow-sm">Market&nbsp;Cap&nbsp;Calculator</h1>
+    <div className="fixed inset-0 flex items-center justify-center p-6 overflow-auto bg-gradient-to-br from-baseblue to-warppurple">
+      <div className="w-full max-w-xl bg-white/10 backdrop-blur-xs shadow-glass rounded-3xl p-8">
+        <h1 className="text-4xl font-bold text-center text-gray-50 mb-6 drop-shadow">Market Cap Calculator</h1>
 
         <input
-          value={address}
-          onChange={e=>setAddress(e.target.value)}
-          placeholder="Paste token address (0x...)"
           className="w-full mb-4 p-3 rounded-lg bg-white/20 placeholder-gray-200 text-gray-50 focus:outline-none focus:ring-2 focus:ring-white"
+          placeholder="Paste token address (0x...)"
+          value={address}
+          onChange={e => setAddress(e.target.value)}
         />
         <button
           onClick={fetchData}
-          className="w-full py-3 rounded-lg bg-baseblue hover:bg-warppurple transition-colors font-semibold shadow-md"
+          className="w-full py-3 rounded-lg bg-baseblue hover:bg-warppurple transition-colors font-semibold shadow-md text-white"
         >
           Calculate
         </button>
@@ -39,17 +44,22 @@ export default function Home(){
 
         {data && (
           <div className="mt-8 space-y-6 animate-fade-in">
-            <p className="text-lg text-center">
+            <p className="text-lg text-center text-gray-50">
               Current Price: <span className="font-mono">${Number(data.usdPrice).toFixed(6)}</span>
             </p>
 
             <div>
-              <h2 className="font-semibold mb-2">Targets</h2>
+              <h2 className="font-semibold text-gray-50 mb-2">Targets</h2>
               <ul className="flex flex-wrap gap-3">
-                {data.targets.map(t=>(
+                {data.targets.map(t => (
                   <li
                     key={t.price}
-                    className="px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 transition-transform transform hover:-translate-y-1 text-sm backdrop-blur-xs shadow-inner"
+                    className={
+                      'px-3 py-1 rounded-full text-sm backdrop-blur-xs shadow-inner transition-transform transform hover:-translate-y-1 ' +
+                      (t.price === '1'
+                        ? 'bg-gray-200/30 backdrop-blur-sm text-gray-50 ring-1 ring-white/70 hover:-translate-y-2'
+                        : 'bg-white/20 hover:bg-white/30 text-blue-100')
+                    }
                   >
                     ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
                   </li>
@@ -57,7 +67,7 @@ export default function Home(){
               </ul>
             </div>
 
-            <div>
+            <div className="text-gray-50">
               <h2 className="font-semibold mb-2">All‑Time High</h2>
               <p>ATH Price: ${Number(data.athMcData.athPrice).toFixed(6)}</p>
               <p>ATH Market Cap: ${Number(data.athMcData.athMarketCap).toLocaleString()}</p>
