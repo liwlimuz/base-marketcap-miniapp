@@ -66,7 +66,7 @@ export default function Home() {
                       key={t.price}
                       style={
                         t.price === '1'
-                          ? {{ backgroundColor: '#C0C0C0', backdropFilter: 'blur(6px)', zIndex: 10 }}
+                          ? { backgroundColor: '#C0C0C0', backdropFilter: 'blur(6px)', zIndex: 10 }
                           : {}
                       }
                       className={
