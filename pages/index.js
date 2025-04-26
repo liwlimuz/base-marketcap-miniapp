@@ -39,7 +39,9 @@ export default function Home() {
 
       <div className="fixed inset-0 flex items-center justify-center p-6 overflow-auto bg-gradient-to-br from-baseblue to-warppurple">
         <div className="w-full max-w-xl bg-white/10 backdrop-blur-xs shadow-glass rounded-3xl p-8">
-          <h1 className="text-4xl font-bold text-center text-gray-50 mb-6">Market Cap Calculator</h1>
+          <div className="inline-block bg-[#C0C0C0] text-gray-900 px-4 py-2 rounded-full shadow-lg mx-auto mb-6">
+            Market Cap Calculator
+          </div>
 
           <input
             value={address}
@@ -69,18 +71,16 @@ export default function Home() {
                 <h2 className="font-semibold text-gray-50 mb-2">Targets</h2>
                 <ul className="flex flex-wrap gap-3">
                   
+
 {data.targets.map(t => (
   <li
     key={t.price}
-    className={
-      t.price === '1'
-        ? 'main-pill px-4 py-2 rounded-full text-sm text-gray-900 ring-1 ring-white/80 shadow-lg transition-transform transform hover:-translate-y-2'
-        : 'px-3 py-1 rounded-full text-sm bg-white/20 hover:bg-white/30 text-blue-100 transition-transform transform hover:-translate-y-1'
-    }
+    className="px-3 py-1 rounded-full text-sm bg-white/20 hover:bg-white/30 text-blue-100 transition-transform transform hover:-translate-y-1"
   >
     ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
   </li>
 ))}
+
 
                 </ul>
               </div>
