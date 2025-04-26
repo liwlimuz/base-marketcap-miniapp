@@ -1,9 +1,13 @@
 import Head from "next/head";
+import { useState, useEffect } from "react";
 import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
 import { useState } from "react";
 
 export default function Home() {
+  const [toast, setToast] = useState('');
+  const [valid, setValid] = useState(true);
+
   const [contractAddress, setContractAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -74,9 +78,9 @@ export default function Home() {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
-          >
-            {loading ? "Calculating…" : "Calculate"}
+            className="w-full mt-3 bg-[#0052FF] text-white py-2 rounded-full font-semibold hover:scale-[1.03] active:scale-95 transition disabled:opacity-60 flex items-center justify-center"
+>
+            {loading ? <span className="spinner" aria-label="Loading"></span> : "Calculate"}
           </button>
 
           {marketCap1 && (
@@ -92,11 +96,18 @@ export default function Home() {
           {targetsData.length > 0 && (
             <div className="grid grid-cols-2 gap-2 mt-4">
               {targetsData.map((t) => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105">
+                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105 relative">
+                  
                   <div className="font-semibold">$ {t.price}</div>
                   <div className="text-xs font-mono">×{t.timesAway}</div>
+                
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(t.timesAway); setToast('Copied ×' + t.timesAway); setTimeout(() => setToast(''), 2000); }}
+                    aria-label={"Copy ×" + t.timesAway}
+                    className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
+                  >📋</button>
                 </div>
-              ))}
+              ))}}
             </div>
           )}
 
