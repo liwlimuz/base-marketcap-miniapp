@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
+body {
+  @apply bg-gradient-to-br from-[#004CFF] to-[#7A5CFF] font-inter;
+}
