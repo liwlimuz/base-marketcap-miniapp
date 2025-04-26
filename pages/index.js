@@ -61,20 +61,18 @@ export default function Home() {
               <div>
                 <h2 className="font-semibold text-gray-50 mb-2">Targets</h2>
                 <ul className="flex flex-wrap gap-3">
-                  
-{data.targets.map(t => (
-  <li
-    key={t.price}
-    className={
-      t.price === '1'
-        ? 'px-4 py-2 rounded-full text-sm bg-[#C0C0C0] text-gray-900 ring-1 ring-white/80 shadow-lg z-10 transition-transform transform hover:-translate-y-2'
-        : 'px-3 py-1 rounded-full text-sm bg-white/20 hover:bg-white/30 text-blue-100 transition-transform transform hover:-translate-y-1'
-    }
-  >
-    ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
-  </li>
-))}
-
+                  {data.targets.map(t => (
+                    <li
+                      key={t.price}
+                      className={
+                        t.price === '1'
+                          ? 'px-4 py-2 rounded-full text-sm bg-gray-300/60 backdrop-blur-sm text-gray-900 ring-1 ring-white/90 shadow-lg transition-transform transform hover:-translate-y-2'
+                          : 'px-3 py-1 rounded-full text-sm bg-white/20 hover:bg-white/30 text-blue-100 transition-transform transform hover:-translate-y-1'
+                      }
+                    >
+                      ${'{'}t.price{'}'} → {'{'}t.timesAway{'}'}× → ${'{'}t.requiredMarketCap{'}'}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="text-gray-50"> {/* ATH */}
