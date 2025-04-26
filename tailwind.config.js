@@ -2,7 +2,6 @@
 module.exports = {
   content: ['./pages/**/*.{js,jsx,ts,tsx}'],
   safelist: [
-    'bg-[#C0C0C0]',
     'bg-gray-200/40', 'backdrop-blur-sm', 'ring-1', 'ring-white/80',
     'bg-gray-200/30', 'bg-white/20', 'hover:bg-white/30',
     'hover:-translate-y-2', 'hover:-translate-y-1'
