@@ -56,7 +56,7 @@ export default function Home() {
           {data && (
             <div className="mt-8 space-y-6">
               <p className="text-lg text-center text-gray-50">
-                Current Price: <span className="font-mono">${Number(data.usdPrice).toFixed(6)}</span>
+                Current Price: <span className="font-mono">${'{'}Number(data.usdPrice).toFixed(6){'}'}</span>
               </p>
               <div>
                 <h2 className="font-semibold text-gray-50 mb-2">Targets</h2>
@@ -70,20 +70,20 @@ export default function Home() {
                           : 'px-3 py-1 rounded-full text-sm bg-white/20 hover:bg-white/30 text-blue-100 transition-transform transform hover:-translate-y-1'
                       }
                     >
-                      ${t.price} → {t.timesAway}× → ${t.requiredMarketCap}
+                      ${'{'}t.price{'}'} → {'{'}t.timesAway{'}'}× → ${'{'}t.requiredMarketCap{'}'}
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="text-gray-50">
+              <div className="text-gray-50"> {/* ATH */}
                 <h2 className="font-semibold mb-2">All-Time High</h2>
-                <p>ATH Price: ${Number(data.athMcData.athPrice).toFixed(6)}</p>
-                <p>ATH Market Cap: ${Number(data.athMcData.athMarketCap).toLocaleString()}</p>
+                <p>ATH Price: ${'{'}Number(data.athMcData.athPrice).toFixed(6){'}'}</p>
+                <p>ATH Market Cap: ${'{'}Number(data.athMcData.athMarketCap).toLocaleString(){'}'}</p>
               </div>
             </div>
           )}
         </div>
       </div>
     </>
-  );
+);
 }
