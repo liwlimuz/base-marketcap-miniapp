@@ -80,27 +80,27 @@ const res = await fetch('/api/marketcap', {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
+            className="w-full mt-3 bg-[#8E2DE2] text-gray-800 py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
           >
             {loading ? "Calculating…" : "Calculate"}
           </button>
 
           {marketCap1 && (
-            <div className="text-emerald-600 font-mono text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
+            <div className="text-emerald-600 font-sans text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
           )}
 
           {priceInfo && (
-            <div className="text-white text-center text-sm mt-2 font-mono">
+            <div className="text-gray-800 text-center text-sm mt-2 font-sans">
               {priceInfo}
             </div>
           )}
 
           {targetsData.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+            <div className="grid grid-cols-2 gap-2 mt-4">
               {targetsData.map((t) => (
-                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105">
+                <div key={{t.price}} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105 text-gray-900">
                   <div className="font-semibold">$ {t.price}</div>
-                  <div className="text-xs font-mono">×{t.timesAway}</div>
+                  <div className="text-xs font-sans">×{t.timesAway}</div>
                 </div>
               ))}
             </div>

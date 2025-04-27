@@ -1,7 +1,7 @@
 import { ethers, isAddress } from "ethers";
 
 const RPC = "https://base-mainnet.g.alchemy.com/v2/nPrb1P3OYnpEcuCW-gZ9HI5ZfVHsqbhC";
-const TARGETS = [0.01, 0.1, 1, 10];
+const TARGETS = [0.1, 1, 10];
 
 async function fetchUsdPrice(addr) {
   try {
@@ -30,33 +30,17 @@ async function fetchAthData(addr) {
 
 async function resolveTicker(ticker) {
   try {
-    const lower = ticker.toLowerCase().replace(/^\$/, "");
-
-    // 1️⃣ coarse search
-    const search = await fetch(
-      `https://api.coingecko.com/api/v3/search?query=${lower}`
-    );
-    if (!search.ok) return null;
-    const { coins } = await search.json();
-
-    const match = coins.find(
-      (c) => c.symbol.toLowerCase() === lower
-    );
-    if (!match) return null;
-
-    // 2️⃣ detailed payload (platforms → contract addresses)
-    const detail = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${match.id}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`
-    );
-    if (!detail.ok) return null;
-    const info = await detail.json();
-
-    // prefer Base, fallback to Ethereum
-    return (
-      info.platforms?.base ||
-      info.platforms?.ethereum ||
-      null
-    );
+    const res = await fetch(`https://api.coingecko.com/api/v3/search?query=${ticker}`);
+    if (!res.ok) return null;
+    const { coins } = await res.json();
+    const lower = ticker.toLowerCase();
+    // find matching and on Base
+    for (let coin of coins) {
+      if (coin.symbol.toLowerCase() === lower && coin.platforms?.base) {
+        return coin.platforms.base;
+      }
+    }
+    return null;
   } catch {
     return null;
   }
