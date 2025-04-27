@@ -86,7 +86,7 @@ const res = await fetch('/api/marketcap', {
           </button>
 
           {marketCap1 && (
-            <div className="text-2xl font-extrabold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-center whitespace-nowrap">
+            <div className="font-extrabold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-xl whitespace-nowrap text-center whitespace-nowrap">
             Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
           </div>
           )}
