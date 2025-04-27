@@ -6,15 +6,17 @@ async function getPrice(addr){
 }
 async function resolveAddressFromTicker(ticker) {
   const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${ticker}`);
-  if (!searchRes.ok) return null;
+  if (!searchRes.ok) throw new Error('Ticker lookup failed');
   const { coins } = await searchRes.json();
   const match = coins.find(c => c.symbol.toLowerCase() === ticker.toLowerCase());
-  if (!match) return null;
+  if (!match) throw new Error('Ticker not found');
   const detailRes = await fetch(`https://api.coingecko.com/api/v3/coins/${match.id}`);
-  if (!detailRes.ok) return null;
+  if (!detailRes.ok) throw new Error('Coin details lookup failed');
   const details = await detailRes.json();
-  const address = details.platforms?.base;
-  if (!address) return null;
+  // Find any contract address in platforms
+  const platforms = details.platforms || {};
+  const address = Object.values(platforms).find(v => typeof v==='string' && v.startsWith('0x'));
+  if (!address) throw new Error('No contract found on Base');
   return address;
 }
 
