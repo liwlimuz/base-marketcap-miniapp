@@ -20,7 +20,7 @@ export default function Home() {
     setMarketCap1("");
 
     try {
-      const payload = { input: inputValue.trim() };
+      const payload = inputValue.startsWith('$')
         ? { ticker: inputValue.trim().slice(1) }
         : { contractAddress: inputValue.trim() };
       const res = await fetch('/api/marketcap', {
