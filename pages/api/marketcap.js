@@ -88,9 +88,7 @@ export default async function handler(req, res) {
       requiredMarketCap: (supply * p).toString(),
       timesAway: usd ? (p / usd).toFixed(2) : null
     }));
-    
-    const currentMarketCap = (supply * usd).toString();
-res.status(200).json({ currentMarketCap,  usdPrice: usd.toString(), timesAway: usd ? (1 / usd).toFixed(2) : null, targets, athMcData: await fetchAthData(address) });
+    res.status(200).json({ usdPrice: usd.toString(), timesAway: usd ? (1 / usd).toFixed(2) : null, targets, athMcData: await fetchAthData(address) });
   } catch (e) {
     res.status(500).json({ error: "Call failed" });
   }

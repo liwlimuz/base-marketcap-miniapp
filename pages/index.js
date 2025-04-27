@@ -10,7 +10,6 @@ export default function Home() {
   const [error, setError] = useState("");
   const [priceInfo, setPriceInfo] = useState("");
   const [targetsData, setTargetsData] = useState([]);
-  const [currentMC, setCurrentMC] = useState("");
   const [marketCap1, setMarketCap1] = useState("");
 
   const calculate = async () => {
@@ -28,8 +27,7 @@ const res = await fetch('/api/marketcap', {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (data.currentMarketCap) setCurrentMC(data.currentMarketCap);
-if (!res.ok) throw new Error(data.error || "Unknown error");
+      if (!res.ok) throw new Error(data.error || "Unknown error");
 
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
@@ -87,10 +85,6 @@ if (!res.ok) throw new Error(data.error || "Unknown error");
             {loading ? <span className="text-black">Calculating…</span> : <span className="text-black">Calculate</span>}
           </button>
 
-          
-          {currentMC && (
-            <div className="text-base font-sans text-gray-800 text-center mt-1">Current MC: ${Number(currentMC).toLocaleString()}</div>
-          )}
           {marketCap1 && (
             <div className="text-2xl font-extrabold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-center">
             Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
