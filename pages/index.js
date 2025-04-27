@@ -27,13 +27,16 @@ const res = await fetch('/api/marketcap', {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
+      if (data.currentMarketCap) {
+        setPriceInfo(
+          `Current MC: $${Number(data.currentMarketCap).toLocaleString()}`
+        );
+      }
       if (!res.ok) throw new Error(data.error || "Unknown error");
 
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
-      if (data.currentMarketCap && one.timesAway) {
-        setPriceInfo(
-          `Current MC: $${Number(data.currentMarketCap).toLocaleString()} -> ×${one.timesAway} away from $1`
+      -> ×${one.timesAway} away from $1`
         );
       }
       if (data.targets) setTargetsData(data.targets);
