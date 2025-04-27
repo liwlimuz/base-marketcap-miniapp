@@ -20,10 +20,8 @@ export default function Home() {
     setMarketCap1("");
 
     try {
-      const payload = inputValue.startsWith('$')
-        ? { ticker: inputValue.trim().slice(1) }
-        : { contractAddress: inputValue.trim() };
-      const res = await fetch('/api/marketcap', {
+      const payload = inputValue.startsWith('$') ? { ticker: inputValue.trim().slice(1) } : { contractAddress: inputValue.trim() };
+const res = await fetch('/api/marketcap', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
