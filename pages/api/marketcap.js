@@ -5,18 +5,25 @@ async function getPrice(addr){
  try{const r=await fetch(`https://api.dexscreener.com/latest/dex/tokens/${addr}`);if(!r.ok)return 0;const j=await r.json();return parseFloat(j?.pairs?.[0]?.priceUsd||"0")||0;}catch{return 0;}
 }
 
+
 async function resolveAddressFromTicker(ticker) {
-  // 1) Try DexScreener search on Base (chainId 8453)
-  try {
-    const ds = await fetch(`https://api.dexscreener.com/latest/dex/search?query=${ticker}`);
-    if (ds.ok) {
-      const j = await ds.json();
-      const pair = j.pairs.find(p => p.chainId === 8453);
-      if (pair) {
-        const sym = ticker.toLowerCase();
-        if (pair.baseToken.symbol.toLowerCase() === sym) return pair.baseToken.address;
-        if (pair.quoteToken.symbol.toLowerCase() === sym) return pair.quoteToken.address;
-      }
+  const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${ticker}`);
+  if (!searchRes.ok) throw new Error('Please double-check the address or ticker and ensure it’s a valid Base token on the correct network.');
+  const { coins } = await searchRes.json();
+  const match = coins.find(c => c.symbol.toLowerCase() === ticker.toLowerCase());
+  if (!match) throw new Error('Please double-check the address or ticker and ensure it’s a valid Base token on the correct network.');
+  const detailRes = await fetch(`https://api.coingecko.com/api/v3/coins/${match.id}`);
+  if (!detailRes.ok) throw new Error('Please double-check the address or ticker and ensure it’s a valid Base token on the correct network.');
+  const details = await detailRes.json();
+  const platforms = details.platforms || {};
+  let address = platforms.base;
+  if (!address) {
+    address = Object.values(platforms).find(v => typeof v === 'string' && v.startsWith('0x'));
+  }
+  if (!address) throw new Error('Please double-check the address or ticker and ensure it’s a valid Base token on the correct network.');
+  return address;
+}
+
     }
   } catch {}
   // 2) Fallback to Coingecko if DexScreener fails
