@@ -80,9 +80,9 @@ const res = await fetch('/api/marketcap', {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#8E2DE2] text-gray-800 py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
+            className="w-full mt-3 bg-[#8E2DE2] text-black py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
           >
-            {loading ? "Calculating…" : "Calculate"}
+            {loading ? <span className="text-black">Calculating…</span> : <span className="text-black">Calculate</span>}
           </button>
 
           {marketCap1 && (
@@ -92,7 +92,7 @@ const res = await fetch('/api/marketcap', {
           )}
 
           {priceInfo && (
-            <div className="text-gray-800 text-center text-sm mt-2 font-sans">
+            <div className="text-black text-center text-sm mt-2 font-sans">
               {priceInfo}
             </div>
           )}
