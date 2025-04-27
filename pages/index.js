@@ -36,7 +36,7 @@ const res = await fetch('/api/marketcap', {
 
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
-      -> ×${one.timesAway} away from $1`
+      
         );
       }
       if (data.targets) setTargetsData(data.targets);
