@@ -4,7 +4,7 @@ import { DollarSign } from 'lucide-react';
 import { useState } from "react";
 
 export default function Home() {
-  const [contractAddress, setContractAddress] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(true);
   const [error, setError] = useState("");
@@ -20,10 +20,13 @@ export default function Home() {
     setMarketCap1("");
 
     try {
-      const res = await fetch("/api/marketcap", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractAddress: contractAddress.trim() })
+      const payload = inputValue.trim().startsWith('$')
+        ? { ticker: inputValue.trim().slice(1) }
+        : { contractAddress: inputValue.trim() };
+      const res = await fetch('/api/marketcap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unknown error");
@@ -67,7 +70,7 @@ export default function Home() {
 
           
           <input
-            value={contractAddress}
+            value={inputValue}
             onChange={e => {
               const v = e.target.value;
               setContractAddress(v);
@@ -77,7 +80,7 @@ export default function Home() {
                 onKeyDown={e => {
               if (e.key === 'Enter') calculate();
             }}
-            placeholder="0x… token address"
+            placeholder="Paste 0x… address or type $TICKER (e.g. $DEGEN)"
             className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
           />
 
