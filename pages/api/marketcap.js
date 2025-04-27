@@ -55,6 +55,7 @@ async function resolveAddress(query) {
 }
 
 export default async function handler(req, res) {
+  // v0.6.13: Unified ticker/address resolution logic inserted here
   res.setHeader("Access-Control-Allow-Origin", "*");
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
 
