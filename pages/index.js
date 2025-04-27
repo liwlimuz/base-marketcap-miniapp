@@ -70,16 +70,12 @@ export default function Home() {
 
           
           <input
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}$/.test(v));
-            }}
-            onKeyDown={e => { if (e.key === 'Enter') calculate(); }}
-                onKeyDown={e => {
-              if (e.key === 'Enter') calculate();
-            }}
-            placeholder="Paste 0x… address or type $TICKER (e.g. $DEGEN)"
-            className="w-full px-3 py-2 md:px-4 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
-          />
+  value={inputValue}
+  onChange={e => setInputValue(e.target.value)}
+  onKeyDown={e => { if (e.key === 'Enter') calculate(); }}
+  placeholder="Paste 0x… address or type $TICKER (e.g. $DEGEN)"
+  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
+/>
 
 
           
