@@ -48,7 +48,7 @@ const res = await fetch('/api/marketcap', {
     <>
       
       <Head>
-        <title>Base Dollar Targets</title>
+        <title>Base(d) Dollar Targets</title>
         <meta name="description" content="Calculate market cap targets for Base chain tokens instantly." />
         <meta property="og:title" content="Base Dollar MC Alpha" />
         <meta property="og:description" content="See how large a token's market cap needs to be to reach $1, $10, etc., on the Base network." />
@@ -64,7 +64,7 @@ const res = await fetch('/api/marketcap', {
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
-          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base Dollar Targets</h1>
+          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base(d) Dollar Targets</h1>
 
           
           <input
