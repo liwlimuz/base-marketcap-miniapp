@@ -71,10 +71,7 @@ export default function Home() {
           
           <input
             value={inputValue}
-            onChange={e => {
-              const v = e.target.value;
-              setContractAddress(v);
-              setValid(/^0x[a-fA-F0-9]{40}$/.test(v));
+            onChange={e => setInputValue(e.target.value)}$/.test(v));
             }}
             onKeyDown={e => { if (e.key === 'Enter') calculate(); }}
                 onKeyDown={e => {
