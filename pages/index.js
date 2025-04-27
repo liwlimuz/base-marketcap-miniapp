@@ -20,7 +20,7 @@ export default function Home() {
     setMarketCap1("");
 
     try {
-      const payload = inputValue.trim().startsWith('$')
+      const payload = { input: inputValue.trim() };
         ? { ticker: inputValue.trim().slice(1) }
         : { contractAddress: inputValue.trim() };
       const res = await fetch('/api/marketcap', {
@@ -33,9 +33,9 @@ export default function Home() {
 
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
-      if (data.usdPrice && data.timesAway) {
+      if (data.usdPrice && one.timesAway) {
         setPriceInfo(
-          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${data.timesAway} away from $1`
+          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${one.timesAway} away from $1`
         );
       }
       if (data.targets) setTargetsData(data.targets);
