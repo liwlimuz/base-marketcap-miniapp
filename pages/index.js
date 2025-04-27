@@ -1,61 +1,116 @@
-import Head from 'next/head';
-import { useState } from 'react';
+import Head from "next/head";
+import { motion } from 'framer-motion';
+import { DollarSign } from 'lucide-react';
+import { useState } from "react";
 
 export default function Home() {
-  const [inputValue, setInputValue] = useState('');
-  const [data, setData] = useState(null);
-  const [error, setError] = useState('');
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') calculate();
-  };
+  const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [valid, setValid] = useState(true);
+  const [error, setError] = useState("");
+  const [priceInfo, setPriceInfo] = useState("");
+  const [targetsData, setTargetsData] = useState([]);
+  const [marketCap1, setMarketCap1] = useState("");
 
   const calculate = async () => {
-    setError('');
-    setData(null);
+    setLoading(true);
+    setError("");
+    setPriceInfo("");
+    setTargetsData([]);
+    setMarketCap1("");
+
     try {
+      const payload = inputValue.trim().startsWith('$')
+        ? { ticker: inputValue.trim().slice(1) }
+        : { contractAddress: inputValue.trim() };
       const res = await fetch('/api/marketcap', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input: inputValue.trim() })
+        body: JSON.stringify(payload),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Unknown error');
-      setData(json);
-    } catch (err) {
-      setError(err.message);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Unknown error");
+
+      const one = data.targets?.find(t => t.price === "1");
+      if (one) setMarketCap1(one.requiredMarketCap);
+      if (data.usdPrice && data.timesAway) {
+        setPriceInfo(
+          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${data.timesAway} away from $1`
+        );
+      }
+      if (data.targets) setTargetsData(data.targets);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
+      
       <Head>
-        <title>Base Dollar MC Alpha v0.7</title>
+        <title>Base Dollar Targets</title>
+        <meta name="description" content="Calculate market cap targets for Base chain tokens instantly." />
+        <meta property="og:title" content="Base Dollar MC Alpha" />
+        <meta property="og:description" content="See how large a token's market cap needs to be to reach $1, $10, etc., on the Base network." />
+        <meta property="og:image" content="/og.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href="https://base-marketcap-miniapp.vercel.app/" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" as="style" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+        <link rel="preload" href="/og.png" as="image" />
+        {/* Plausible Analytics */}
+        <script async defer data-domain="base-marketcap-miniapp.vercel.app" src="https://plausible.io/js/plausible.js"></script>
       </Head>
-      <main className="min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h1 className="text-center text-3xl font-bold text-purple-800 mb-4">Base Dollar MC Alpha</h1>
+
+      <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
+        <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
+          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base Dollar Targets</h1>
+
+          
           <input
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Paste address or enter $TICKER"
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 mb-3"
-          />
+  value={inputValue}
+  onChange={e => setInputValue(e.target.value)}
+  onKeyDown={e => { if (e.key === 'Enter') calculate(); }}
+  placeholder="Paste 0x… address or type $TICKER (e.g. $DEGEN)"
+  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E2DE2] text-sm bg-white/70"
+/>
+
+
+          
           <button
             onClick={calculate}
-            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+            disabled={loading}
+            className="w-full mt-3 bg-[#8E2DE2] text-white py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
           >
-            Calculate
+            {loading ? "Calculating…" : "Calculate"}
           </button>
-          {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
-          {data && (
-            <div className="mt-6 space-y-4">
-              <p className="text-lg font-medium text-center">Current Price: <span className="font-mono">${data.usdPrice}</span></p>
-              <p className="text-lg font-medium text-center">$1 Cap: <span className="font-mono">${data.marketCap1}</span></p>
+
+          {marketCap1 && (
+            <div className="text-emerald-600 font-mono text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
+          )}
+
+          {priceInfo && (
+            <div className="text-white text-center text-sm mt-2 font-mono">
+              {priceInfo}
             </div>
           )}
+
+          {targetsData.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              {targetsData.map((t) => (
+                <div key={t.price} className="bg-purple-100 rounded-xl p-2 text-center transition transform hover:scale-105">
+                  <div className="font-semibold">$ {t.price}</div>
+                  <div className="text-xs font-mono">×{t.timesAway}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
         </div>
-      </main>
+      </motion.main>
     </>
   );
 }

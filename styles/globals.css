@@ -1,7 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gradient-to-br from-blue-600 to-purple-600;
+/* Gradient animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.main-bg {
+  background: linear-gradient(-45deg, #004CFF 0%, #7A5CFF 33%, #4A00E0 66%, #004CFF 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
+
