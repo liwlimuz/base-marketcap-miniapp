@@ -6,15 +6,15 @@ async function getPrice(addr){
 }
 async function resolveAddressFromTicker(ticker) {
   const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${ticker}`);
-  if (!searchRes.ok) throw new Error('Ticker lookup failed');
+  if (!searchRes.ok) return null;
   const { coins } = await searchRes.json();
   const match = coins.find(c => c.symbol.toLowerCase() === ticker.toLowerCase());
-  if (!match) throw new Error('Ticker not found');
+  if (!match) return null;
   const detailRes = await fetch(`https://api.coingecko.com/api/v3/coins/${match.id}`);
-  if (!detailRes.ok) throw new Error('Coin details lookup failed');
+  if (!detailRes.ok) return null;
   const details = await detailRes.json();
   const address = details.platforms?.base;
-  if (!address) throw new Error('No Base contract for this ticker');
+  if (!address) return null;
   return address;
 }
 
@@ -22,7 +22,7 @@ export default async function handler(req,res){
  res.setHeader("Access-Control-Allow-Origin","*");
  if(req.method!=="POST")return res.status(405).json({error:"POST only"});
  const {contractAddress}=req.body;
- if(!contractAddress||!isAddress(contractAddress))return res.status(400).json({ error: "Invalid address. Please double-check the contract address, ensure it's a Base network token contract, and try again." });
+ if(!contractAddress||!isAddress(contractAddress))return res.status(400).json({ error: 'Please double-check the address or ticker and ensure it’s a valid Base token on the correct network.' });
  try{
   const provider=new ethers.JsonRpcProvider(RPC);
   const abi=["function totalSupply() view returns (uint256)","function decimals() view returns (uint8)"];
