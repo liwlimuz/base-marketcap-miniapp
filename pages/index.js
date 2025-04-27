@@ -63,8 +63,8 @@ const res = await fetch('/api/marketcap', {
       </Head>
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
-          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wide text-center mb-4">Base(d) Dollar Targets</h1>
+        <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
+          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
 
           
           <input
@@ -80,13 +80,13 @@ const res = await fetch('/api/marketcap', {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#8E2DE2] text-black py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60"
+            className="w-full mt-3 bg-[#8E2DE2] text-black py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60 hover:shadow-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
           >
             {loading ? <span className="text-black">Calculating…</span> : <span className="text-black">Calculate</span>}
           </button>
 
           {marketCap1 && (
-            <div className="font-extrabold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-xl whitespace-nowrap text-center whitespace-nowrap">
+            <div font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-xl whitespace-nowrap text-center whitespace-nowrap text-lg sm:text-xl md:text-2xl whitespace-nowrap overflow-hidden text-ellipsis">
             Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
           </div>
           )}
