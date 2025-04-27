@@ -92,7 +92,7 @@ const res = await fetch('/api/marketcap', {
           )}
 
           {priceInfo && (
-            <div className="text-black text-center text-sm mt-2 font-sans">
+            <div className="text-black text-center text-xl mt-2 font-sans">
               {priceInfo}
             </div>
           )}
