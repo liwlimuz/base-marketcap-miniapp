@@ -36,9 +36,6 @@ const res = await fetch('/api/marketcap', {
 
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
-      
-        );
-      }
       if (data.targets) setTargetsData(data.targets);
     } catch (e) {
       setError(e.message);
