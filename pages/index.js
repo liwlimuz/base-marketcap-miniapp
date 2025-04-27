@@ -86,7 +86,7 @@ const res = await fetch('/api/marketcap', {
           </button>
 
           {marketCap1 && (
-            <div className="text-emerald-600 font-sans text-lg text-center mt-4">$1 Cap: ${Number(marketCap1).toLocaleString()}</div>
+            <div className="text-emerald-600 font-sans text-lg text-center mt-4">Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}</div>
           )}
 
           {priceInfo && (
