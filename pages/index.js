@@ -100,7 +100,7 @@ const res = await fetch('/api/marketcap', {
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105">
                   <div className="font-semibold">$ {t.price}</div>
-                  <div className="text-xs font-sans">text-gray-700 ×{t.timesAway}</div>
+                  <div className="text-xs font-sans">×{t.timesAway}</div>
                 </div>
               ))}
             </div>
