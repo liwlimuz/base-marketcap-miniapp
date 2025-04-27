@@ -89,7 +89,7 @@ if (!res.ok) throw new Error(data.error || "Unknown error");
 
           
           {currentMC && (
-            <div className="text-lg font-sans text-gray-800 text-center mt-2">Current MC: ${Number(currentMC).toLocaleString()}</div>
+            <div className="text-base font-sans text-gray-800 text-center mt-1">Current MC: ${Number(currentMC).toLocaleString()}</div>
           )}
           {marketCap1 && (
             <div className="text-2xl font-extrabold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-center">
