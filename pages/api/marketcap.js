@@ -4,6 +4,7 @@ const TARGETS=[0.1,1,10];
 async function getPrice(addr){
  try{const r=await fetch(`https://api.dexscreener.com/latest/dex/tokens/${addr}`);if(!r.ok)return 0;const j=await r.json();return parseFloat(j?.pairs?.[0]?.priceUsd||"0")||0;}catch{return 0;}
 }
+
 async function resolveAddressFromTicker(ticker) {
   const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${ticker}`);
   if (!searchRes.ok) throw new Error('Ticker lookup failed');
@@ -13,12 +14,19 @@ async function resolveAddressFromTicker(ticker) {
   const detailRes = await fetch(`https://api.coingecko.com/api/v3/coins/${match.id}`);
   if (!detailRes.ok) throw new Error('Coin details lookup failed');
   const details = await detailRes.json();
-  // Find any contract address in platforms
   const platforms = details.platforms || {};
-  const address = Object.values(platforms).find(v => typeof v==='string' && v.startsWith('0x'));
-  if (!address) throw new Error('No contract found on Base');
+  // Prefer Base chain address
+  let address = null;
+  for (const [chain, addr] of Object.entries(platforms)) {
+    if (chain.toLowerCase().includes('base') && typeof addr === 'string' && addr.startsWith('0x')) {
+      address = addr;
+      break;
+    }
+  }
+  if (!address) throw new Error('No Base contract found for this ticker');
   return address;
 }
+
 
 export default async function handler(req,res){
  res.setHeader("Access-Control-Allow-Origin","*");
