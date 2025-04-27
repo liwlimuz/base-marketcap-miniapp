@@ -31,9 +31,9 @@ const res = await fetch('/api/marketcap', {
 
       const one = data.targets?.find(t => t.price === "1");
       if (one) setMarketCap1(one.requiredMarketCap);
-      if (data.usdPrice && one.timesAway) {
+      if (data.currentMarketCap && one.timesAway) {
         setPriceInfo(
-          `Current price $${Number(data.usdPrice).toFixed(6)} -> ×${one.timesAway} away from $1`
+          `Current MC: $${Number(data.currentMarketCap).toLocaleString()} -> ×${one.timesAway} away from $1`
         );
       }
       if (data.targets) setTargetsData(data.targets);
