@@ -17,7 +17,7 @@ export default function Home() {
     const featuredSymbol = 'DEGEN';
   const featuredContractAddress = '0x4ed4e862860bed51a9570b96d89af5e1b0efefed';
   useEffect(() => {
-    if (featuredTicker) {
+    if (featuredContractAddress) {
       fetch("/api/marketcap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,19 +78,22 @@ const res = await fetch('/api/marketcap', {
         <script async defer data-domain="base-marketcap-miniapp.vercel.app" src="https://plausible.io/js/plausible.js"></script>
       </Head>
 
-      <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-        <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
-          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-widerr text-center mb-4">Base(d) Dollar Targets</h1>
-
+      <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
       {featuredData && (
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-        <img
-          src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
-          alt={featuredSymbol}
-          className="w-12 h-12 mx-auto mb-2 rounded-full"
-/>
+        <div className="transform scale-75 origin-center mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center mx-auto w-3/4">
+          {featuredData.imageUrl && (
+            <img src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
+                 alt={featuredSymbol}
+                 className="w-12 h-12 mx-auto mb-2 rounded-full" />
+          )}
           <div className="text-sm text-gray-600">Featured</div>
-          <div className="font-bold text-lg">Featured ($DEGEN): Current MC $${Number(featuredData.currentMarketCap).toLocaleString()}</div>
+          <div className="font-bold text-lg">
+            Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
+          </div>
+        </div>
+      )}
+<div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
+          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-widerr text-center mb-4">Base(d) Dollar Targets</h1></div>
         </div>
       )}
 
