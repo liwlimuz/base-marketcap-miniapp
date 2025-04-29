@@ -86,8 +86,8 @@ const res = await fetch('/api/marketcap', {
           </button>
 
           {marketCap1 && (
-            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-lg sm:text-xl md:text-2xl whitespace-nowrap overflow-hidden text-ellipsis text-center">
-            Necessary MC for $1/coin: ${Math.round(Number(marketCap1)).toLocaleString()}
+            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-lg sm:text-xl md:text-2xl break-words text-center">
+            Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
           </div>
           )}
 
