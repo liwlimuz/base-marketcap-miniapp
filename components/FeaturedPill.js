@@ -16,7 +16,7 @@ export default function FeaturedPill() {
         const data = await res.json();
         setFeaturedData(data);
       } catch (e) {
-        console.error('Failed to fetch featured data', e);
+        console.error(e);
       }
     }
     fetchData();
