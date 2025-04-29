@@ -25,7 +25,7 @@ export default function FeaturedPill() {
   if (!featuredData) return null;
 
   return (
-    <div className="transform scale-75 origin-center mb-4 p-2 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
+    <div className="transform scale-75 origin-center mb-8 p-2 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
       {featuredData.imageUrl && (
         <img
           src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
@@ -35,7 +35,7 @@ export default function FeaturedPill() {
       )}
       <div className="text-xs text-gray-600">Featured</div>
       <div className="font-semibold text-sm">
-        Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
+        Featured ($DEGEN): Current MC ${'{'}Number(featuredData.currentMarketCap).toLocaleString(){'}'}
       </div>
     </div>
   );
