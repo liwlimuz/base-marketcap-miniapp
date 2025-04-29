@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function FeaturedPill() {
   const [featuredData, setFeaturedData] = useState(null);
   const featuredSymbol = 'DEGEN';
+  const featuredContractAddress = '0x4ed4e862860bed51a9570b96d89af5e1b0efefed';
 
   useEffect(() => {
     async function fetchData() {
@@ -32,7 +33,7 @@ export default function FeaturedPill() {
       />
       <div className="text-xs text-gray-600">Featured</div>
       <div className="font-semibold text-sm">
-        Featured ($DEGEN): Current MC {Number(featuredData.currentMarketCap).toLocaleString()}
+        Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
       </div>
     </div>
   );
