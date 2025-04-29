@@ -28,7 +28,7 @@ export default function Home() {
     }
   }, [featuredTicker]);
 
-  const calculate () => {
+  const calculate = async () => {
     setLoading(true);
     setError("");
     setPriceInfo("");
