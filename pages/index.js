@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
-import FeaturedPill from "../components/FeaturedPill";
 import { useState, useEffect } from "react";
+import FeaturedPill from "../components/FeaturedPill";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
