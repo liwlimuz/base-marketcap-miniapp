@@ -80,7 +80,7 @@ const res = await fetch('/api/marketcap', {
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
       {featuredData && (
-        <div className="transform scale-75 origin-center mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center mx-auto w-3/4">
+        <div className="transform scale-50 origin-center mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
           {featuredData.imageUrl && (
             <img
               src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
@@ -96,7 +96,7 @@ const res = await fetch('/api/marketcap', {
       )}
 
       {featuredData && (
-        <div className="transform scale-75 origin-center mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center mx-auto w-3/4">
+        <div className="transform scale-50 origin-center mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
           {featuredData.imageUrl && (
             <img
               src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
@@ -112,7 +112,7 @@ const res = await fetch('/api/marketcap', {
       )}
 
       {featuredData && (
-        <div className="transform scale-75 origin-center mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center mx-auto w-3/4">
+        <div className="transform scale-50 origin-center mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
           {featuredData.imageUrl && (
             <img src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
                  alt={featuredSymbol}
