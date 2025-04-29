@@ -9,6 +9,7 @@ export default function Home() {
   const [error, setError] = useState('');
   const [priceInfo, setPriceInfo] = useState('');
   const [marketCap1, setMarketCap1] = useState(null);
+  const [targetsData, setTargetsData] = useState([]);
 
   const calculate = async () => {
     setLoading(true);
@@ -24,10 +25,11 @@ export default function Home() {
       });
       const data = await res.json();
       if (data.currentMarketCap) {
-        setPriceInfo(`Current MC: $${Number(data.currentMarketCap).toLocaleString()}`);
+        setPriceInfo(\`Current MC: $\${Number(data.currentMarketCap).toLocaleString()}\`);
       }
       const one = data.targets?.find(t => t.price === '1');
       if (one) setMarketCap1(one.requiredMarketCap);
+      if (data.targets) setTargetsData(data.targets);
     } catch (e) {
       setError('Failed to fetch data');
     } finally {
@@ -46,6 +48,7 @@ export default function Home() {
         className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]"
       >
         <FeaturedPill />
+
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
           <h1 className="font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">
             Base(d) Dollar Targets
@@ -63,6 +66,7 @@ export default function Home() {
           >
             Calculate
           </button>
+
           {marketCap1 && (
             <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-base text-center whitespace-nowrap overflow-hidden text-ellipsis">
               Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
@@ -73,10 +77,26 @@ export default function Home() {
               {priceInfo}
             </div>
           )}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
-            {/** Targets Data */}
-            {/* Sample loop */}
-          </div>
+          {error && (
+            <div className="text-red-500 text-center mt-2">
+              {error}
+            </div>
+          )}
+
+          {targetsData.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+              {targetsData.map(t => (
+                <div key={t.price} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105">
+                  <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent">
+                    $ {t.price}
+                  </div>
+                  <div className="text-xs font-sans text-gray-900">
+                    ×{t.timesAway} away from ${t.price}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </motion.main>
     </>
