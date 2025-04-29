@@ -76,16 +76,24 @@ const res = await fetch('/api/marketcap', {
       </Head>
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
-      {featuredData && (
-        <div className="transform scale-50 origin-center mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
-          {featuredData.imageUrl && (
-            <img
-              src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
-              alt={featuredSymbol}
-              className="w-12 h-12 mx-auto mb-2 rounded-full"
-            />
-          )}
-          <div className="text-sm text-gray-600">Featured</div>
+    {featuredData && (
+      <div className="transform scale-75 origin-center mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
+        {featuredData.imageUrl && (
+          <img
+            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
+            alt={featuredSymbol}
+            className="w-12 h-12 mx-auto mb-2 rounded-full"
+          />
+        )}
+        <div className="text-sm text-gray-600">Featured</div>
+        <div className="font-semibold text-base">
+          Featured ($DEGEN): Current MC ${'{'}Number(featuredData.currentMarketCap).toLocaleString(){'}'}
+        </div>
+      </div>
+    )}
+
+
+<div className="text-sm text-gray-600">Featured</div>
           <div className="font-semibold text-base">
             Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
           </div>
@@ -130,7 +138,7 @@ const res = await fetch('/api/marketcap', {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105">
-                  <div className="font-semibold">$ {t.price}</div>
+                  <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent">$ {t.price}</div>
                   <div className="text-xs font-sans">×{t.timesAway}</div>
                 </div>
               ))}
