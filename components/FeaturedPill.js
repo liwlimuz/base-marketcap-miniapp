@@ -35,7 +35,7 @@ export default function FeaturedPill() {
       )}
       <div className="text-xs text-gray-600">Featured</div>
       <div className="font-semibold text-sm">
-        Featured ($DEGEN): Current MC ${'{'}Number(featuredData.currentMarketCap).toLocaleString(){'}'}
+        Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
       </div>
     </div>
   );
