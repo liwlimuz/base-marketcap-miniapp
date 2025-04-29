@@ -98,6 +98,22 @@ const res = await fetch('/api/marketcap', {
       {featuredData && (
         <div className="transform scale-75 origin-center mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center mx-auto w-3/4">
           {featuredData.imageUrl && (
+            <img
+              src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
+              alt={featuredSymbol}
+              className="w-12 h-12 mx-auto mb-2 rounded-full"
+            />
+          )}
+          <div className="text-sm text-gray-600">Featured</div>
+          <div className="font-bold text-lg">
+            Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
+          </div>
+        </div>
+      )}
+
+      {featuredData && (
+        <div className="transform scale-75 origin-center mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center mx-auto w-3/4">
+          {featuredData.imageUrl && (
             <img src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${featuredContractAddress}/logo.png`}
                  alt={featuredSymbol}
                  className="w-12 h-12 mx-auto mb-2 rounded-full" />
