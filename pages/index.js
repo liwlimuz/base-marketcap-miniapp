@@ -90,6 +90,12 @@ const res = await fetch('/api/marketcap', {
           </div>
         </div>
       )}
+          <div className="text-sm text-gray-600">Featured</div>
+          <div className="font-semibold text-base">
+            Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
+          </div>
+        </div>
+      )}
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
           <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
 
