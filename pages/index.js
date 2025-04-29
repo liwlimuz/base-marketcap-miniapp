@@ -26,7 +26,7 @@ export default function Home() {
         .then((r) => r.json())
         .then((data) => setFeaturedData(data));
     }
-  }, [featuredTicker]);
+  }, [featuredContractAddress]);
 
   const calculate = async () => {
     setLoading(true);
