@@ -64,7 +64,7 @@ const res = await fetch('/api/marketcap', {
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
-          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
+          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-widerr text-center mb-4">Base(d) Dollar Targets</h1>
 
           
           <input
@@ -80,19 +80,19 @@ const res = await fetch('/api/marketcap', {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full mt-3 bg-[#8E2DE2] text-black py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60 hover:shadow-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            className="w-full mt-3 bg-[#8E2DE2] text-black py-2 md:py-3 rounded-full font-semibold hover:scale-[1.03] transition duration-200 ease-in-out disabled:opacity-60 hover:shadow-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none hover:shadow-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
           >
             {loading ? <span className="text-black">Calculating…</span> : <span className="text-black">Calculate</span>}
           </button>
 
           {marketCap1 && (
-            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-lg sm:text-xl md:text-2xl whitespace-nowrap overflow-hidden text-ellipsis text-center">
+            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-base sm:text-xl md:text-2xl break-words text-center">
             Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
           </div>
           )}
 
           {priceInfo && (
-            <div className="text-black text-center text-xl mt-2 font-sans">
+            <div className="text-black text-center text-lg sm:text-xl mt-2 font-sans">
               {priceInfo}
             </div>
           )}
@@ -101,7 +101,7 @@ const res = await fetch('/api/marketcap', {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105">
-                  <div className="font-semibold">$ {t.price}</div>
+                  <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent drop-shadow-lg mt-4 text-base sm:text-xl md:text-2xl break-words text-center">$ {t.price}</div>
                   <div className="text-xs font-sans">×{t.timesAway}</div>
                 </div>
               ))}
