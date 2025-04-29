@@ -11,7 +11,7 @@ export default function FeaturedPill() {
         const res = await fetch('/api/marketcap', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contractAddress: featuredContractAddress })
+          body: JSON.stringify({ contractAddress: featuredContractAddress }),
         });
         const data = await res.json();
         setFeaturedData(data);
@@ -35,7 +35,7 @@ export default function FeaturedPill() {
       )}
       <div className="text-xs text-gray-600">Featured</div>
       <div className="font-semibold text-sm">
-        Featured ($DEGEN): Current MC ${Number(featuredData.currentMarketCap).toLocaleString()}
+        Featured ($DEGEN): Current MC ${'{'}Number(featuredData.currentMarketCap).toLocaleString(){'}'}
       </div>
     </div>
   );
