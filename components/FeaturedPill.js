@@ -26,9 +26,8 @@ export default function FeaturedPill() {
 
   return (
     <div className="transform scale-75 origin-center mb-8 p-2 bg-indigo-50 border border-indigo-200 rounded-lg text-center mx-auto w-3/4">
-      <img
-        src="/degen-logo.png"
-        alt={featuredSymbol}
+      <img src="/degen-logo.png"
+        className="w-24 h-24 mx-auto"alt={featuredSymbol}
         className="w-10 h-10 mx-auto mb-2 rounded-full"
       />
       <div className="text-xs text-gray-600">Featured</div>
