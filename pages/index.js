@@ -64,7 +64,7 @@ const res = await fetch('/api/marketcap', {
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
-          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
+          <h1 className="font-sans font-sans text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
 
           
           <input
