@@ -86,7 +86,7 @@ const res = await fetch('/api/marketcap', {
           </button>
 
           {marketCap1 && (
-            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent mt-4 whitespace-nowrap overflow-visible text-xl sm:text-2xl md:text-3xl text-center">
+            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent mt-4 whitespace-nowrap overflow-visible text-xs sm:text-sm md:text-base text-center">
             Necessary MC for $1/coin: ${Number(marketCap1).toLocaleString()}
           </div>
           )}
@@ -101,7 +101,7 @@ const res = await fetch('/api/marketcap', {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105">
-                  <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent">$ {t.price}</div>
+                  <div className="font-semibold">$ {t.price}</div>
                   <div className="text-xs font-sans">×{t.timesAway}</div>
                 </div>
               ))}
