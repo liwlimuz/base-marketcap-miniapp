@@ -63,6 +63,7 @@ const res = await fetch('/api/marketcap', {
       </Head>
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
+      <FeaturedPill />
 
 
         <FeaturedPill />
