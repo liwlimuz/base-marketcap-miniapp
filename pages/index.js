@@ -64,7 +64,7 @@ const res = await fetch('/api/marketcap', {
 
       <motion.main initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}} className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-[#004CFF] to-[#7A5CFF]">
         <div className="w-full sm:max-w-[450px] md:max-w-[600px] bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8">
-          <h1 className="font-sans font-sans text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
+          <h1 className="font-poppins font-poppins text-[#8E2DE2] text-3xl md:text-4xl font-black tracking-wider text-center mb-4">Base(d) Dollar Targets</h1>
 
           
           <input
@@ -86,7 +86,7 @@ const res = await fetch('/api/marketcap', {
           </button>
 
           {marketCap1 && (
-            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent mt-4 whitespace-nowrap overflow-visible text-xl sm:text-2xl md:text-2xl text-center">
+            <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent mt-4 whitespace-nowrap overflow-visible text-xl sm:text-2xl md:text-2xl text-center font-sans">
             MC for $1/coin: ${Number(marketCap1).toLocaleString()}
           </div>
           )}
@@ -101,14 +101,14 @@ const res = await fetch('/api/marketcap', {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
               {targetsData.map((t) => (
                 <div key={t.price} className="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center transition transform hover:scale-105">
-                  <div className="font-semibold bg-gradient-to-r from-[#004CFF] via-[#7A5CFF] to-[#4A00E0] bg-clip-text text-transparent">$ {t.price}</div>
+                  <div className="font-semibold">$ {t.price}</div>
                   <div className="text-xs font-sans">×{t.timesAway}</div>
                 </div>
               ))}
             </div>
           )}
 
-          {error && <div className="text-red-600 text-center text-sm mt-3">{error}</div>}
+          {error && <div className="text-red-600 text-center text-sm mt-3 font-sans">{error}</div>}
         </div>
       </motion.main>
     </>
