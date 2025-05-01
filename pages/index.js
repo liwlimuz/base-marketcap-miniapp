@@ -1,4 +1,6 @@
+import FeaturedPill from '../components/FeaturedPill';
 import Head from "next/head";
+import FeaturedPill from '../components/FeaturedPill';
 import { motion } from 'framer-motion';
 import { DollarSign } from 'lucide-react';
 import { useState } from "react";
